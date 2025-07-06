@@ -1,0 +1,183 @@
+{
+  "header": {
+    "topmenu": {
+      "search": "Recherche...",
+      "buttons": {
+        "realTime": "Temps réel",
+        "forecast": "Prévisions",
+        "climate": "Climatologie",
+        "pedagogy": "Pédagogie",
+        "community": "Communauté",
+        "association": "Association",
+        "forums": "Forums"
+      },
+      "account": {
+        "login": "Connexion"
+      },
+      "submenus": {
+        "realTime": {
+          "participative": {
+            "title": "Observations participatives",
+            "tooltips": {
+              "archives": "Archives",
+              "participate": "Participer"
+            }
+          },
+          "webcams": {
+            "title": "Webcam Météo",
+            "cta": "Toutes les webcams",
+            "tooltip": "Carte des webcams"
+          },
+          "live": {
+            "title": "En direct",
+            "categories": {
+              "rain": "Pluie",
+              "satellite": "Satellite",
+              "storm": "Foudre"
+            }
+          },
+          "observations": {
+            "title": "Obervations stations météo",
+            "categories": {
+              "temperature": "Température",
+              "sunshine": "Ensoleillement",
+              "wind": "Vent",
+              "rain": "Pluviométrie",
+              "waterTemp": "Température de l'eau<br/>Météo marine",
+              "snow": "Enneigment<br/>Avalanches"
+            }
+          },
+          "liveGallery": {
+            "title": "Galerie en direct",
+            "cta": "Participer",
+            "tooltips": {
+              "allPictures": "Toutes les photos",
+              "participate": "Ajouter mes photos"
+            }
+          },
+          "more": {
+            "title": "Aller plus loin",
+            "polls": "Radiosondages",
+            "altitudeData": "Données d'altitude",
+            "naoAo": "Indice NAO/AO",
+            "addMeteoStation": "Ajouter ma station météo",
+            "openDataMeteo": "OpenData météo"
+          },
+          "settings": {
+            "label": "Paramétrez l'affichage des mini-cartes du menu",
+            "zones": {
+              "france_lg": "France",
+              "france_se_m": "Sud-Est FR",
+              "france_so_m": "Sud-Ouest FR",
+              "france_no_m": "Nord-Ouest FR",
+              "france_ne_m": "Nord-Est FR",
+              "france_se_corse_m": "Sud-Est + Corse",
+              "belgique_m": "Belgique"
+            }
+          }
+        },
+        "forecast": {
+          "local": {
+            "title": "Prévisions locales",
+            "cta": "Toutes les villes"
+          },
+          "interactiveMaps": "Cartes interactives",
+          "models": "Modèles météo",
+          "forecast": "Prévisions",
+          "forecastWeatherWidget": {
+            "title": "Prévisions pour",
+            "updatedAt": "Actualisé à"
+          }
+        },
+        "climate": {
+          "reports": "Bilans météo (BQS)",
+          "events": "Evenements marquants (BS, 2S)",
+          "synopticAnalysis": "Synoptique (BIM)",
+          "climatology": {
+            "title": "Climatologie"
+          },
+          "historical": {
+            "title": "Historique"
+          },
+          "climateData": {
+            "title": "Données climato"
+          },
+          "archiveMaps": {
+            "title": "Cartes archivées"
+          }
+        },
+        "pedagogy": {
+          "school": {
+            "title": "Stations « Météo À l'École »"
+          },
+          "secondary": {
+            "title": "Ressources pédagogiques collège"
+          },
+          "highSchool": {
+            "title": "Ressources pédagogiques lycée"
+          },
+          "scientific": {
+            "title": "Ressources scientifiques"
+          },
+          "weatherReports": {
+            "title": "Dossiers météo"
+          },
+          "weatherVocabulary": {
+            "title": "Vocabulaire météo"
+          }
+        },
+        "community": {
+          "staticNetwork": {
+            "title": "Réseau Static",
+            "pages": {
+              "introduction": "Présentation du réseau",
+              "inscription": "Inscrivez votre station"
+            }
+          },
+          "amateurStations": {
+            "title": "Stations Amateur",
+            "pages": {
+              "map": "Carte des stations",
+              "inscription": "Inscrivez votre station"
+            }
+          },
+          "tools": {
+            "title": "Outils",
+            "pages": {
+              "electric": "ElectrIC: points de vue de chasse à l'orage",
+              "conversions": "Calculs et conversions météo",
+              "webmasters": "Webmasters"
+            }
+          },
+          "website": {
+            "title": "Le Site",
+            "pages": {
+              "inscription": "Inscrivez-vous gratuitement !",
+              "news": "Actualités",
+              "press": "Presse et médias"
+            }
+          },
+          "plus": {
+            "title": "Les Plus Infoclimat",
+            "pages": {
+              "contests": "Concours de prévisions",
+              "cartography": "Outil de cartographie CartIC"
+            }
+          },
+          "socials": {
+            "title": "Réseaux Sociaux",
+            "pages": {
+              "facebook": "Suivez-nous sur Facebook",
+              "twitter": "Suivez-nous sur Twitter"
+            }
+          },
+          "contribute": {
+            "title": "Contribuer à Infoclimat",
+            "cta": "Contribuer",
+            "description": "Faites connaissance avec l'équipe bénévole qui travaille dans les coulisses d'Infoclimat pour en faire la plus belle communauté météo francophone. Et vous aussi, contribuez à cette initiative lancée en 2001 en rejoignant notre équipe !"
+          }
+        }
+      }
+    }
+  }
+}

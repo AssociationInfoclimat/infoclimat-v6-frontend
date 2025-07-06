@@ -1,0 +1,29 @@
+/* 
+  Font Exo:
+  font-family: "Exo", sans-serif;
+  font-optical-sizing: auto; 
+
+  Tailwind: Injected in below @theme
+*/
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap');
+@import 'tailwindcss';
+
+@config "../../tailwind.config.js";
+
+@theme {
+  --color-ic-blue-light: #6eb4c9;
+  --color-ic-blue-light-2: #35dbff;
+  --color-ic-blue: #467888;
+  --color-ic-blue-2: #2e8294;
+  --color-ic-blue-dark: #143941;
+  --color-ic-red: #bf360c;
+  --color-ic-red-2: #ff3838;
+  --color-ic-grey-light: rgb(238, 238, 238);
+  --color-ic-grey: rgba(0, 0, 0, 0.15);
+  --font-size-menu-xl: 1.12rem;
+  --font-exo: 'Exo', sans-serif;
+}
+
+body {
+  @apply text-sm;
+}

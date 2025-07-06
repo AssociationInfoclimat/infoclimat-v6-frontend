@@ -1,0 +1,27 @@
+
+# See README.md
+services:
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./php-app-example:/var/www/html
+      - ./vue-app/dist:/var/www/html/vue-dist
+    depends_on:
+      - php
+
+  php:
+    image: php:8.2-fpm
+    volumes:
+      - ./php-app-example:/var/www/html
+      - ./vue-app/dist:/var/www/html/vue-dist
+    ports:
+      - 9000:9000
+    command: php-fpm
+
+#volumes:
+  #vue-app-dist:
+  #  driver: local
