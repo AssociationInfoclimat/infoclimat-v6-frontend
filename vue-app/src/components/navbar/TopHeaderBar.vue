@@ -8,6 +8,7 @@ import RealTimeSubmenu from './top-header-bar-submenus/realtime/RealTimeSubmenu.
 const { t } = useI18n()
 import cx from 'classnames'
 import ForecastSubmenu from './top-header-bar-submenus/forecast/ForecastSubmenu.vue'
+import ClimateSubmenu from './top-header-bar-submenus/climate/ClimateSubmenu.vue'
 
 enum LEGACY_MENU {
   HOME = 'HOME',
@@ -41,7 +42,7 @@ const openOrClose = (menu: LEGACY_MENU) => {
 
 <template>
   <div class="bg-linear-to-t from-ic-blue-dark to-ic-blue">
-    <div class="max-w-screen-lg mx-auto flex flex-row">
+    <div class="lg:w-ic-fixed-custom mx-auto flex flex-row">
       <div class="py-1">
         <form id="formsrch" method="get" action="/recherche/sphinx.php" onsubmit="">
           <TextField :placeholder="t('header.topmenu.search')" />
@@ -95,9 +96,10 @@ const openOrClose = (menu: LEGACY_MENU) => {
       )
     "
   >
-    <div class="max-w-screen-lg mx-auto flex flex-row pt-2">
+    <div class="lg:w-ic-fixed-custom mx-auto flex flex-row pt-2">
       <RealTimeSubmenu v-if="selectedMenu === LEGACY_MENU.REAL_TIME" />
       <ForecastSubmenu v-if="selectedMenu === LEGACY_MENU.FORECAST" />
+      <ClimateSubmenu v-if="selectedMenu === LEGACY_MENU.CLIMATE" />
     </div>
   </div>
 </template>

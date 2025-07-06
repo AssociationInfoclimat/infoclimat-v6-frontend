@@ -91,19 +91,45 @@
         },
         "climate": {
           "reports": "Bilans météo (BQS)",
-          "events": "Evenements marquants (BS, 2S)",
-          "synopticAnalysis": "Synoptique (BIM)",
+          "events": {
+            "title": "Evenements marquants (BS, 2S)",
+            "specialReports": "Suivis spéciaux"
+          },
+          "synopticAnalysis": "Analyses synoptiques (BIM)",
           "climatology": {
-            "title": "Climatologie"
+            "title": "Climatologie",
+            "links": {
+              "normalesAndRecords": "Normales et records 1981-2010",
+              "nationalThermicIndicator": "Indicateur thermique national",
+              "nationalPrecipitationIndicator": "Indicateur pluviométrique national",
+              "globalClimatologyMaps": "Cartes climatologiques mondiales",
+              "lightningBilans": "Bilans de foudroiement"
+            }
           },
           "historical": {
-            "title": "Historique"
+            "title": "Historique",
+            "links": {
+              "thunderstorms": "Épisodes orageux, tornades",
+              "heavyRain": "Fortes pluies, inondations",
+              "cold": "Froid, neige, tempêtes..."
+            }
           },
           "climateData": {
-            "title": "Données climato"
+            "title": "Données climato",
+            "links": {
+              "baseClimatology": "Base climato/pluvio",
+              "dailyObservations": "Mes relevés journaliers",
+              "monthlyAnalyses": "Analyses mensuelles",
+              "climaticQueries": "Requêtes climatologiques"
+            }
           },
           "archiveMaps": {
-            "title": "Cartes archivées"
+            "title": "Cartes archivées",
+            "links": {
+              "observations": "Observations Tn, Tx, RR 1881-1999",
+              "observationsSince": "Observations depuis 1975",
+              "reanalyses": "Réanalyses NCEP 1871-2011"
+            }
           }
         },
         "pedagogy": {

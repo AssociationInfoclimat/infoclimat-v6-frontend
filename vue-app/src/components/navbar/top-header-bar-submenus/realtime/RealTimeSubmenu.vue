@@ -6,6 +6,7 @@ import Button from '@/components/kit/Button.vue'
 import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-submenus/TopHeaderSubmenuTitle.vue'
 import MapCard from './MapCard.vue'
 import { Zone } from '@/shared/types'
+import TopHeaderLink from '../TopHeaderLink.vue'
 
 const URLs = {
   participative: {
@@ -178,24 +179,43 @@ const nowTimeLabel = computed(() => {
     <div class="flex-1/5">
       <TopHeaderSubmenuTitle :title="t('header.topmenu.submenus.realTime.liveGallery.title')" />
     </div>
-    <div class="flex-1/5">
+    <div class="flex-1/5 h-full flex flex-col">
       <TopHeaderSubmenuTitle :title="t('header.topmenu.submenus.realTime.more.title')" />
-      <label
-        >{{ t('header.topmenu.submenus.realTime.settings.label') }}
-        <Select
-          :value="selectedZone"
-          :options="
-            Object.values(Zone).map((zone) => ({
-              label: t(`header.topmenu.submenus.realTime.settings.zones.${zone}`),
-              value: zone,
-            }))
-          "
-          @change="
-            (value: unknown) => {
-              selectedZone = value as Zone
-            }
-          "
-      /></label>
+      <div class="flex flex-col">
+        <TopHeaderLink href="">{{
+          t('header.topmenu.submenus.realTime.more.polls')
+        }}</TopHeaderLink>
+        <TopHeaderLink href="">{{
+          t('header.topmenu.submenus.realTime.more.altitudeData')
+        }}</TopHeaderLink>
+        <TopHeaderLink href="">{{
+          t('header.topmenu.submenus.realTime.more.naoAo')
+        }}</TopHeaderLink>
+        <TopHeaderLink href="">{{
+          t('header.topmenu.submenus.realTime.more.addMeteoStation')
+        }}</TopHeaderLink>
+        <TopHeaderLink href="">{{
+          t('header.topmenu.submenus.realTime.more.openDataMeteo')
+        }}</TopHeaderLink>
+      </div>
+      <div class="mt-auto">
+        <label class="text-xs">
+          <div class="leading-none">{{ t('header.topmenu.submenus.realTime.settings.label') }}</div>
+          <Select
+            :value="selectedZone"
+            :options="
+              Object.values(Zone).map((zone) => ({
+                label: t(`header.topmenu.submenus.realTime.settings.zones.${zone}`),
+                value: zone,
+              }))
+            "
+            @change="
+              (value: unknown) => {
+                selectedZone = value as Zone
+              }
+            "
+        /></label>
+      </div>
     </div>
   </div>
 </template>

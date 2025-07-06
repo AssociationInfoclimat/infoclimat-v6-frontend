@@ -4,7 +4,7 @@ import PhotoBoxes from '@/components/navbar/PhotoBoxes.vue'
 
 <template>
   <div class="bg-linear-to-t from-ic-blue-light to-ic-blue">
-    <div class="max-w-screen-lg mx-auto flex flex-row">
+    <div class="lg:w-ic-fixed-custom mx-auto flex flex-row">
       <div class="header-logo">
         <img src="@/assets/logo_IC_5.1.png" alt="Infoclimat" />
       </div>

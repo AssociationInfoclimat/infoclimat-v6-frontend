@@ -34,7 +34,7 @@ const emit = defineEmits<{
  Since latest tailwind, when @apply, 
  we need to use `@reference "tailwindcss";` (https://tailwindcss.com/docs/functions-and-directives#apply-directive) 
 */
-@reference "@/assets/base.css";
+@reference "@/assets/base.less";
 
 a {
   @apply px-6 whitespace-nowrap py-[6px] border-r border-ic-blue;

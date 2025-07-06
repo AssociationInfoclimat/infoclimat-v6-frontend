@@ -31,7 +31,7 @@ npm ci
 npm run dev
 ```
 
-➡️ http://localhost:5174/opendata
+➡️ http://localhost:5173/opendata
 
 ## Production release: Try it as in production
 

@@ -1,5 +1,5 @@
 // We're not supposed to override default sm, xs ..
-//  tailwind.config.js file is deprecated and we always should change variables in base.css
+//  tailwind.config.js file is deprecated and we always should change variables in base.less
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 export default {
