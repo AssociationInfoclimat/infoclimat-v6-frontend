@@ -32,6 +32,7 @@ export const adaptWeatherForecast = (forecast: PostPreviApiForecastResponse['res
   return {
     name: unescape(`${forecast.name} ${forecast.dy}`),
     updatedTodayAt: forecast.updated,
+    placeLabel: unescape(forecast.name),
     url: `/previsions-meteo/details/${forecast.vkey}/${forecast.seo}.html`,
     days: comingDays.map((day) => ({
       icon: forecastWeahtertypeToImgUrl(day.p.k),

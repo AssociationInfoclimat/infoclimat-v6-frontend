@@ -1,3 +1,9 @@
+<script setup lang="ts">
+// TODO:
+// Chargement des vignettes depuis le back
+//  à partir des info du user depuis le store du user
+</script>
+
 <template>
   <div class="photo-boxes">
     <div class="photo-box">
@@ -50,7 +56,5 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style></style>

@@ -76,3 +76,12 @@ export type PostPreviApiForecastResponse = {
     vkey: string // "3017393",
   }
 }
+
+export type GetPreviApiCommonRegionsDeptsResponse = {
+  responseData: {
+    id: number
+    label: string
+    updatedAt: string
+    url: string
+  }[]
+}

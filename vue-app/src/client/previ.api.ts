@@ -1,7 +1,8 @@
-import { post } from './common.api'
+import { get, post } from './common.api'
 import type {
   ApiTicketData,
   ApiTicketDataEntropy,
+  GetPreviApiCommonRegionsDeptsResponse,
   PostPreviApiForecastResponse,
   PostPreviApiTicketResponse,
 } from './previ.api.types'
@@ -50,6 +51,15 @@ export const getWeatherForecast = async ({
       ticket_data: data,
       entropy,
     },
+    options: {},
+  })
+  return response
+}
+
+export const getCommonRegionsDepts = async () => {
+  const response = await get<GetPreviApiCommonRegionsDeptsResponse['responseData']>({
+    provider: 'nestjs-v2',
+    url: `/previ/common-regions-depts`,
     options: {},
   })
   return response

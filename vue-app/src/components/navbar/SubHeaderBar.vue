@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PhotoBoxes from '@/components/navbar/PhotoBoxes.vue'
+import HeaderVignettes from '@/components/navbar/HeaderVignettes.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import PhotoBoxes from '@/components/navbar/PhotoBoxes.vue'
         <img src="@/assets/logo_IC_5.1.png" alt="Infoclimat" />
       </div>
       <div class="header-menu flex-1">
-        <PhotoBoxes />
+        <HeaderVignettes />
       </div>
       <div class="header-donation w-96">
         <div

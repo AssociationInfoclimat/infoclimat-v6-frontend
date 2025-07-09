@@ -6,7 +6,7 @@ const props = defineProps<{
 
 <template>
   <a
-    class="pl-2 text-xs hover:bg-white border-l-2 border-transparent hover:border-ic-blue"
+    class="pl-2 text-xs hover:bg-white border-l-3 border-transparent hover:border-ic-blue-light leading-tight"
     :href="href"
     ><slot
   /></a>
