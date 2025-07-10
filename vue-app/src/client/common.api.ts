@@ -1,11 +1,21 @@
+import { getCookie } from '@/shared/utils'
 import axios, { type AxiosRequestConfig } from 'axios'
 
 export const axiosLegacyBase = axios.create({
   baseURL: 'https://www.infoclimat.fr/api',
 })
 
+// In our new nest endpoints,
+//  we gonna try to pass the current cookie
+//  to authenticate the user when he's logged in:
+
+const AUTH_COOKIE_NAME = 'f_r_cookie'
+
 export const axiosNestjsBase = axios.create({
   baseURL: 'http://localhost:3000/api', // TODO: move in .env
+  headers: {
+    'x-ic-token': getCookie(AUTH_COOKIE_NAME),
+  },
 })
 
 // Throws an error if the response is not 200
