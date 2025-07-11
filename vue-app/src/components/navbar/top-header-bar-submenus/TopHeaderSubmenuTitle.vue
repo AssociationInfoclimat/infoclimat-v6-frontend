@@ -5,7 +5,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="font-exo uppercase text-sm text-ic-blue-dark border-b border-ic-blue-dark p-[0] mb-[5px]">
-    {{ title }}
+  <div
+    class="font-exo uppercase text-sm leading-tight text-ic-blue-dark border-b border-ic-blue-dark p-[0] mb-[5px]"
+  >
+    <span style="font-size: 112%">{{ title[0] }}</span
+    ><span>{{ title.slice(1) }}</span>
   </div>
 </template>

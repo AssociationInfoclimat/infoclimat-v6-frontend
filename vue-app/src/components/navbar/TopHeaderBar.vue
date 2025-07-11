@@ -9,6 +9,7 @@ const { t } = useI18n()
 import cx from 'classnames'
 import ForecastSubmenu from './top-header-bar-submenus/forecast/ForecastSubmenu.vue'
 import ClimateSubmenu from './top-header-bar-submenus/climate/ClimateSubmenu.vue'
+import PedagogySubmenu from './top-header-bar-submenus/pedagogy/PedagogySubmenu.vue'
 
 enum LEGACY_MENU {
   HOME = 'HOME',
@@ -100,6 +101,7 @@ const openOrClose = (menu: LEGACY_MENU) => {
       <RealTimeSubmenu v-if="selectedMenu === LEGACY_MENU.REAL_TIME" />
       <ForecastSubmenu v-if="selectedMenu === LEGACY_MENU.FORECAST" />
       <ClimateSubmenu v-if="selectedMenu === LEGACY_MENU.CLIMATE" />
+      <PedagogySubmenu v-if="selectedMenu === LEGACY_MENU.PEDAGOGY" />
     </div>
   </div>
 </template>

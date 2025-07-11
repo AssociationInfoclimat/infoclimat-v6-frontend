@@ -10,6 +10,7 @@ const props = defineProps<{
   rounded?: 'full'
   icon?: [IconPrefix, IconName] | IconProp
   tooltip?: string
+  variant?: 'primary' | 'transparent'
 }>()
 
 const emit = defineEmits<{
@@ -23,7 +24,9 @@ const emit = defineEmits<{
     :title="tooltip"
     :class="
       cx(
-        'block whitespace-nowrap cursor-pointer bg-ic-red text-white',
+        'block whitespace-nowrap cursor-pointer',
+        variant === 'primary' && 'bg-ic-red text-white',
+        variant === 'transparent' && 'bg-transparent text-white hover:bg-ic-blue-dark',
         icon && !label ? 'h-8 w-8 items-center justify-center flex' : 'px-4 py-2',
         {
           uppercase: uppercase,
@@ -41,8 +44,11 @@ const emit = defineEmits<{
       }
     "
   >
-    <Icon v-if="icon" :icon="icon" />
-    {{ label }}
+    <slot v-if="$slots.default" />
+    <template v-else>
+      <Icon v-if="icon" :icon="icon" />
+      {{ label }}
+    </template>
   </a>
 </template>
 

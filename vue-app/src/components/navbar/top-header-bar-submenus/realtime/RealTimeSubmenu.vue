@@ -39,12 +39,14 @@ const nowTimeLabel = computed(() => {
           <MapCard type="meteoalerte">
             <div class="absolute z-2 bottom-[-10px] right-2 flex flex-row gap-2">
               <Button
+                variant="primary"
                 :href="URLs.participative.cta.archives"
                 :tooltip="t('header.topmenu.submenus.realTime.participative.tooltips.archives')"
                 rounded="full"
                 :icon="['fas', 'calendar-alt']"
               />
               <Button
+                variant="primary"
                 :href="URLs.participative.cta.participate"
                 :tooltip="t('header.topmenu.submenus.realTime.participative.tooltips.participate')"
                 rounded="full"
@@ -56,7 +58,11 @@ const nowTimeLabel = computed(() => {
         <div>
           <TopHeaderSubmenuTitle :title="t('header.topmenu.submenus.realTime.webcams.title')" />
           <MapCard type="webcam" />
-          <Button :label="t('header.topmenu.submenus.realTime.webcams.cta')" uppercase />
+          <Button
+            variant="primary"
+            :label="t('header.topmenu.submenus.realTime.webcams.cta')"
+            uppercase
+          />
         </div>
       </div>
     </div>
