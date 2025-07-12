@@ -7,7 +7,7 @@ import type { GetLexiqueWordsResponse } from '@/client/misc.api.types'
 
 const bgImageUrl = 'https://static.infoclimat.net/images/partenaires/logo_mae.png'
 
-const words = ref<GetLexiqueWordsResponse['responseData']['words']>([])
+const words = ref<GetLexiqueWordsResponse['responseData']>([])
 onMounted(async () => {
   words.value = await getLexiqueWords()
 })
