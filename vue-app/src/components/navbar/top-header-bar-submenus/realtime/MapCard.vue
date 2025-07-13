@@ -128,7 +128,14 @@ const href = ''
     <slot />
   </a>
 </template>
+
 <style scoped>
+/*  
+ Since latest tailwind, when @apply, 
+ we need to use `@reference "tailwindcss";` (https://tailwindcss.com/docs/functions-and-directives#apply-directive) 
+*/
+@reference "@/assets/base.less";
+
 .map-card {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   & > div.overlay {

@@ -2,7 +2,7 @@ import { getCookie } from '@/shared/utils'
 import axios, { type AxiosRequestConfig } from 'axios'
 
 export const axiosLegacyBase = axios.create({
-  baseURL: 'https://www.infoclimat.fr/api',
+  baseURL: 'https://www.infoclimat.fr',
 })
 
 // In our new nest endpoints,
