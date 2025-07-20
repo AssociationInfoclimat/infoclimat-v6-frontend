@@ -7,6 +7,7 @@ import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-submenus/T
 import MapCard from './MapCard.vue'
 import { Zone } from '@/shared/types'
 import TopHeaderLink from '../TopHeaderLink.vue'
+import PhotoliveGalleryWidget from './PhotoliveGalleryWidget.vue'
 
 const URLs = {
   participative: {
@@ -184,6 +185,11 @@ const nowTimeLabel = computed(() => {
     </div>
     <div class="flex-1/5">
       <TopHeaderSubmenuTitle :title="t('header.topmenu.submenus.realTime.liveGallery.title')" />
+      <div class="flex flex-col gap-2">
+        <div class="relative">
+          <PhotoliveGalleryWidget />
+        </div>
+      </div>
     </div>
     <div class="flex-1/5 h-full flex flex-col">
       <TopHeaderSubmenuTitle :title="t('header.topmenu.submenus.realTime.more.title')" />

@@ -39,3 +39,14 @@ export type GetPhotoliveVignettesResponse = {
     // TODO: Clean this endpoint and type it
   }
 }
+
+export type GetPhotoliveLatestResponse = {
+  responseData: {
+    id: number
+    is_big: boolean
+    photo_url: string
+    url: string
+    dh_prise: string
+    titre: string
+  }[]
+}
