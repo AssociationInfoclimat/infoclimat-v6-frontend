@@ -5,7 +5,7 @@
       "buttons": {
         "realTime": "Temps réel",
         "forecast": "Prévisions",
-        "climate": "Climatologie",
+        "climatology": "Climatologie",
         "pedagogy": "Pédagogie",
         "community": "Communauté",
         "association": "Association",
@@ -89,13 +89,13 @@
             "updatedAt": "Actualisé à"
           }
         },
-        "climate": {
-          "reports": "Bilans météo (BQS)",
-          "events": {
+        "climatology": {
+          "reportsBqs": "Bilans météo (BQS)",
+          "eventsBs2s": {
             "title": "Evenements marquants (BS, 2S)",
             "specialReports": "Suivis spéciaux"
           },
-          "synopticAnalysis": "Analyses synoptiques (BIM)",
+          "synopticAnalysisBim": "Analyses synoptiques (BIM)",
           "climatology": {
             "title": "Climatologie",
             "links": {

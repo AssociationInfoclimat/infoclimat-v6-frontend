@@ -8,14 +8,14 @@ import RealTimeSubmenu from './top-header-bar-submenus/realtime/RealTimeSubmenu.
 const { t } = useI18n()
 import cx from 'classnames'
 import ForecastSubmenu from './top-header-bar-submenus/forecast/ForecastSubmenu.vue'
-import ClimateSubmenu from './top-header-bar-submenus/climate/ClimateSubmenu.vue'
+import ClimatologySubmenu from './top-header-bar-submenus/climatology/ClimatologySubmenu.vue'
 import PedagogySubmenu from './top-header-bar-submenus/pedagogy/PedagogySubmenu.vue'
 
 enum LEGACY_MENU {
   HOME = 'HOME',
   REAL_TIME = 'REAL_TIME',
   FORECAST = 'FORECAST',
-  CLIMATE = 'CLIMATE',
+  CLIMATOLOGY = 'CLIMATOLOGY',
   PEDAGOGY = 'PEDAGOGY',
   COMMUNITY = 'COMMUNITY',
   ASSOCIATION = 'ASSOCIATION',
@@ -61,9 +61,9 @@ const openOrClose = (menu: LEGACY_MENU) => {
           :label="t('header.topmenu.buttons.forecast')"
         />
         <TopHeaderBarMenuItem
-          :selected="isSubMenuOpen && selectedMenu === LEGACY_MENU.CLIMATE"
-          @click="() => openOrClose(LEGACY_MENU.CLIMATE)"
-          :label="t('header.topmenu.buttons.climate')"
+          :selected="isSubMenuOpen && selectedMenu === LEGACY_MENU.CLIMATOLOGY"
+          @click="() => openOrClose(LEGACY_MENU.CLIMATOLOGY)"
+          :label="t('header.topmenu.buttons.climatology')"
         />
         <TopHeaderBarMenuItem
           :selected="isSubMenuOpen && selectedMenu === LEGACY_MENU.PEDAGOGY"
@@ -100,7 +100,7 @@ const openOrClose = (menu: LEGACY_MENU) => {
     <div class="lg:w-ic-fixed-custom mx-auto flex flex-row pt-2">
       <RealTimeSubmenu v-if="selectedMenu === LEGACY_MENU.REAL_TIME" />
       <ForecastSubmenu v-if="selectedMenu === LEGACY_MENU.FORECAST" />
-      <ClimateSubmenu v-if="selectedMenu === LEGACY_MENU.CLIMATE" />
+      <ClimatologySubmenu v-if="selectedMenu === LEGACY_MENU.CLIMATOLOGY" />
       <PedagogySubmenu v-if="selectedMenu === LEGACY_MENU.PEDAGOGY" />
     </div>
   </div>
