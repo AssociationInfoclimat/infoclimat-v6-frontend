@@ -5,7 +5,7 @@ import type {
   GetBs2sResponse,
   GetChroniquesBqsResponse,
 } from '@/client/chroniques.api.types'
-import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-submenus/TopHeaderSubmenuTitle.vue'
+import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-menus/TopHeaderSectionTitle.vue'
 import TopHeaderLink from '../TopHeaderLink.vue'
 import { onMounted, ref } from 'vue'
 

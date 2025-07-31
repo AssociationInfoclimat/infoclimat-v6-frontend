@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import SubHeaderBar from '@/components/navbar/SubHeaderBar.vue'
-import TopHeaderBar from '@/components/navbar/TopHeaderBar.vue'
+import Footer from '@/components/Footer.vue'
+import Header from '@/components/Header.vue'
 </script>
 
 <template>
   <div>
-    <div class="top-bar">
-      <TopHeaderBar />
-    </div>
-    <header>
-      <SubHeaderBar />
-    </header>
+    <Header />
     <h1>Main Layout</h1>
     <div class="main-content">
       <slot />
     </div>
+    <Footer />
   </div>
 </template>
 

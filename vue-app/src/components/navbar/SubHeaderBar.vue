@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HeaderVignettes from '@/components/navbar/HeaderVignettes.vue'
+import HeaderVignettes from '@/components/navbar/SubHeaderVignettes.vue'
 </script>
 
 <template>

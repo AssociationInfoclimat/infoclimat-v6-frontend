@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-submenus/TopHeaderSubmenuTitle.vue'
+import TopHeaderSubmenuTitle from '@/components/navbar/top-header-bar-menus/TopHeaderSectionTitle.vue'
 import TopHeaderLink from '../TopHeaderLink.vue'
 import { onMounted, ref } from 'vue'
 import { getLexiqueWords } from '@/client/misc.api'

@@ -4,12 +4,13 @@ import TextField from '@/components/kit/TextField.vue'
 import TopHeaderBarMenuItem from './TopHeaderBarMenuItem.vue'
 import AccountMenu from './AccountMenu.vue'
 import { ref } from 'vue'
-import RealTimeSubmenu from './top-header-bar-submenus/realtime/RealTimeSubmenu.vue'
+import RealTimeSubmenu from './top-header-bar-menus/realtime/RealTimeSubmenu.vue'
 const { t } = useI18n()
 import cx from 'classnames'
-import ForecastSubmenu from './top-header-bar-submenus/forecast/ForecastSubmenu.vue'
-import ClimatologySubmenu from './top-header-bar-submenus/climatology/ClimatologySubmenu.vue'
-import PedagogySubmenu from './top-header-bar-submenus/pedagogy/PedagogySubmenu.vue'
+import ForecastSubmenu from './top-header-bar-menus/forecast/ForecastSubmenu.vue'
+import ClimatologySubmenu from './top-header-bar-menus/climatology/ClimatologySubmenu.vue'
+import PedagogySubmenu from './top-header-bar-menus/pedagogy/PedagogySubmenu.vue'
+import CommunitySubmenu from './top-header-bar-menus/community/CommunitySubmenu.vue'
 
 enum LEGACY_MENU {
   HOME = 'HOME',
@@ -102,6 +103,7 @@ const openOrClose = (menu: LEGACY_MENU) => {
       <ForecastSubmenu v-if="selectedMenu === LEGACY_MENU.FORECAST" />
       <ClimatologySubmenu v-if="selectedMenu === LEGACY_MENU.CLIMATOLOGY" />
       <PedagogySubmenu v-if="selectedMenu === LEGACY_MENU.PEDAGOGY" />
+      <CommunitySubmenu v-if="selectedMenu === LEGACY_MENU.COMMUNITY" />
     </div>
   </div>
 </template>
