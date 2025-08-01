@@ -1,6 +1,7 @@
 import { get } from './common.api'
 import type {
   GetLexiqueWordsResponse,
+  GetLiveCountersResponse,
   GetPhotoliveLatestResponse,
   GetPhotoliveVignettesResponse,
 } from './misc.api.types'
@@ -26,7 +27,16 @@ export const getPhotoliveVignettes = async () => {
 export const getPhotoliveLatest = async () => {
   const response = await get<GetPhotoliveLatestResponse['responseData']>({
     provider: 'nestjs-v2',
-    url: `/photo-live/latest`,
+    url: `/photolive/latest`,
+    options: {},
+  })
+  return response
+}
+
+export const getLiveCounters = async () => {
+  const response = await get<GetLiveCountersResponse['responseData']>({
+    provider: 'nestjs-v2',
+    url: `/stats/counters`,
     options: {},
   })
   return response

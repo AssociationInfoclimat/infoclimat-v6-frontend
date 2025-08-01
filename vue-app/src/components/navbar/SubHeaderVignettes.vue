@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-row gap-2 items-center">
+  <div class="flex flex-row gap-2 h-full items-center">
     <template v-for="(vignette, index) in vignettes.vignettes" :key="index">
       <!-- Used to show "APPEL AU DON" on k=5 -->
       <template v-if="index < 5">

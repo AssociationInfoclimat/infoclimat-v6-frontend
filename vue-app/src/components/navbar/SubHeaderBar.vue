@@ -1,44 +1,47 @@
 <script setup lang="ts">
 import HeaderVignettes from '@/components/navbar/SubHeaderVignettes.vue'
+import { useUserStore } from '@/stores/user'
+import { computed } from 'vue'
+import Button from '../kit/Button.vue'
+
+const userStore = useUserStore()
+const isPayingMember = computed(() => userStore.isPayingMember)
 </script>
 
 <template>
   <div class="bg-linear-to-t from-ic-blue-light to-ic-blue">
-    <div class="lg:w-ic-fixed-custom mx-auto flex flex-row">
-      <div class="header-logo">
+    <div class="lg:w-ic-fixed-custom mx-auto flex flex-row gap-2">
+      <div class="header-logo py-2">
         <img src="@/assets/logo_IC_5.1.png" alt="Infoclimat" />
       </div>
       <div class="header-menu flex-1">
         <HeaderVignettes />
       </div>
-      <div class="header-donation w-96">
+      <div class="w-96 py-2">
         <div
-          class="card-panel black-text"
+          class="py-1 px-2 shadow text-center"
           style="
-            padding: 2px 4px;
-            display: inline-block;
             height: 80px;
-            width: 315px;
-            margin-top: 0;
+            width: 320px;
             background-image: radial-gradient(
               circle 592px at 48.2% 50%,
               rgba(255, 255, 249, 0.6) 0%,
               rgba(160, 199, 254, 1) 74.6%
             );
-            margin-top: -8px;
-            position: relative;
-            margin-left: 8px;
           "
         >
-          <!--<a style="position:absolute; right:0; top:0; padding:2px; text-decoration:none"  href="#" onclick="document.cookie = 'hide_adhesion_bandeau=yes; path=/; max-age=2678400'; document.location.reload(); return false;">&times;</a>-->
-          <b style="font-size: 1.2em; font-family: Exo, sans-serif">
-            100% gratuit • 0% pub • comment ?! </b
-          ><br />
-          <div style="margin-bottom: 4px">
-            Grâce à des dizaines de bénévoles, des milliers d'adhérents et de donateurs, Infoclimat
-            est rendu possible. Vous aussi, rejoignez-les !
+          <div class="font-exo">100% gratuit • 0% pub • comment ?!</div>
+          <div class="text-xs leading-tight">
+            <template v-if="isPayingMember">
+              Merci infiniment pour votre adhésion.<br />
+              Grâce à vous, Infoclimat peut être pérennisé.
+            </template>
+            <template v-else>
+              Grâce à des dizaines de bénévoles, des milliers d'adhérents et de donateurs,
+              Infoclimat est rendu possible. Vous aussi, rejoignez-les !
+            </template>
           </div>
-          <div class="adhCurseur" style="margin-bottom: 10px">
+          <!--<div class="flex flex-row gap-2">
             <div
               class="tipsy-trigger"
               style="
@@ -47,7 +50,6 @@ import HeaderVignettes from '@/components/navbar/SubHeaderVignettes.vue'
               "
               original-title="Adhésions : 68593€"
             ></div>
-            <!--adh+dons-->
             <div
               class="tipsy-trigger"
               style="
@@ -56,44 +58,31 @@ import HeaderVignettes from '@/components/navbar/SubHeaderVignettes.vue'
               "
               original-title="Dons : 19384.28€"
             ></div>
-            <!--dons-->
             <span style="right: 0; top: 0">objectif 207.520€ → </span>
+          </div>-->
+          <div class="flex flex-row gap-2 items-center justify-center">
+            <Button
+              variant="yellow-purple-gradient"
+              uppercase
+              size="small"
+              href="https://asso.infoclimat.fr/infos/formulaire.php"
+              >❤️ Adhérer</Button
+            >
+            <Button
+              variant="purple-pink-gradient"
+              uppercase
+              size="small"
+              href="https://asso.infoclimat.fr/infos/don.php"
+              >Donner 👍</Button
+            >
+            <Button
+              variant="yellow-purple-gradient"
+              size="small"
+              href="https://asso.infoclimat.fr/infos/"
+              original-title="Pourquoi soutenir ?"
+              :icon="['fas', 'circle-question']"
+            ></Button>
           </div>
-          <a
-            class="growOnHover btn-small waves-effect waves-light btn white black-text hoverable"
-            style="
-              height: 26px;
-              line-height: 26px;
-              background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
-            "
-            href="https://asso.infoclimat.fr/infos/formulaire.php"
-            >❤️ Adhérer</a
-          >
-          <a
-            class="growOnHover btn-small waves-effect waves-light btn white black-text hoverable"
-            style="
-              height: 26px;
-              line-height: 26px;
-              margin-left: 12px;
-              background-image: linear-gradient(-40deg, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);
-            "
-            onclick="return IC_don_affiche_popup();"
-            href="https://asso.infoclimat.fr/infos/don.php"
-            >Donner 👍</a
-          >
-          <a
-            class="tipsy-trigger growOnHover btn-small waves-effect waves-light btn white black-text hoverable"
-            style="
-              height: 26px;
-              line-height: 26px;
-              background-image: linear-gradient(-20deg, #e9defa 0%, #fbfcdb 100%);
-              padding: 0 6px;
-              margin-left: 12px;
-            "
-            href="https://asso.infoclimat.fr/infos/"
-            original-title="Pourquoi soutenir ?"
-            ><i class="material-icons">help</i></a
-          >
         </div>
       </div>
     </div>

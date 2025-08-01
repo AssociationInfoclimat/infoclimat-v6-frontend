@@ -1,6 +1,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { defineStore } from 'pinia'
 import type { Me } from '@/client/user.api.types'
+import { UserStatus } from '@/client/user.api.types'
 import { getCookie } from '@/shared/utils'
 import { getMe } from '@/client/user.api'
 
@@ -26,6 +27,8 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     user,
+    // est adhérent?:
+    isPayingMember: computed(() => user.value?.statuses.includes(UserStatus.ADHERENT)),
     hasCookie,
     loading,
     setUser,

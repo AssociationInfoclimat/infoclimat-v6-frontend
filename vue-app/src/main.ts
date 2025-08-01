@@ -8,10 +8,10 @@ import App from './App.vue'
 import router from './router'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCalendarAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt, faCircleQuestion, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add({ faCalendarAlt, faUserPlus })
+library.add({ faCalendarAlt, faUserPlus, faCircleQuestion })
 
 // locales/fr.json
 import fr from './locales/fr.json'

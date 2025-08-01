@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import type { VignetteStation } from '@/client/user.api.types'
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps<{
   station: VignetteStation
 }>()
 
 const processedHtml = computed(() => {
-  return props.station.content_as_html.replace('/images/pictos_vent/S.png', 'https://infoclimat.fr/images/pictos_vent/S.png')
+  return props.station.content_as_html.replace(
+    '/images/pictos_vent/',
+    'https://infoclimat.fr/images/pictos_vent/',
+  )
 })
 </script>
 
 <template>
-  <div class="boite_station div-inner-station" v-html="processedHtml"></div>
+  <div v-html="processedHtml"></div>
 </template>
 
 <style>
@@ -31,11 +34,20 @@ const processedHtml = computed(() => {
   text-shadow: 0px 0px 1px #000;
   -moz-text-shadow: 0px 0px 1px #000;
   -webkit-text-shadow: 0px 0px 1px #000;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
 }
 .vignettes a.station {
-    display: block;
-    text-decoration: none;
-    font-weight: bold;
-    margin-bottom: 5px;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.vignette-mini-vdir {
+  display: inline-block;
+}
+.vignette-mini-ventmoyen,
+.vignette-mini-rafales {
+  font-size: 10px;
 }
 </style>

@@ -50,3 +50,11 @@ export type GetPhotoliveLatestResponse = {
     titre: string
   }[]
 }
+
+export type GetLiveCountersResponse = {
+  responseData: {
+    loggedin_users: number
+    forum_users: number
+    app_users: number
+  }
+}

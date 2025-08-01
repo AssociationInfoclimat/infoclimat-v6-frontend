@@ -10,7 +10,8 @@ const props = defineProps<{
   rounded?: 'full'
   icon?: [IconPrefix, IconName] | IconProp
   tooltip?: string
-  variant?: 'primary' | 'transparent'
+  size?: 'default' | 'small'
+  variant?: 'primary' | 'transparent' | 'yellow-purple-gradient' | 'purple-pink-gradient'
 }>()
 
 const emit = defineEmits<{
@@ -27,11 +28,20 @@ const emit = defineEmits<{
         'block whitespace-nowrap cursor-pointer',
         variant === 'primary' && 'bg-ic-red text-white',
         variant === 'transparent' && 'bg-transparent text-white hover:bg-ic-blue-dark',
-        icon && !label ? 'h-8 w-8 items-center justify-center flex' : 'px-4 py-2',
+        variant === 'yellow-purple-gradient' &&
+          'bg-gradient-to-r from-ic-yellow-light to-ic-purple-light text-black',
+        variant === 'purple-pink-gradient' &&
+          'bg-gradient-to-r from-ic-purple-light to-ic-pink-light text-black',
+        icon && !label
+          ? `${size === 'small' ? 'h-6 w-6' : 'h-8 w-8'} items-center justify-center flex`
+          : size === 'small'
+            ? 'px-3 py-1'
+            : 'px-4 py-2',
         {
           uppercase: uppercase,
           'rounded-full': rounded === 'full',
           rounded: rounded !== 'full',
+          'text-xs': size === 'small',
         },
       )
     "

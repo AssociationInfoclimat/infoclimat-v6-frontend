@@ -206,5 +206,19 @@
         }
       }
     }
+  },
+  "footer": {
+    "scrollToTop": "Cliquez ici pour retourner en haut",
+    "copyright": "Tous droits réservés – 2001-{ year }",
+    "version": "Infoclimat.fr Version 6",
+    "connectedUsers": "{ nbConnectedUsers } connectés — { time }",
+    "contact": "Contactez-nous",
+    "contribute": "Devenir bénévole ou employé",
+    "about": "Qui sommes-nous ? Que faisons-nous ?",
+    "legal": "Mentions légales",
+    "archivesMeteo": "Moteur de recherche d'archives météo",
+    "meteoVentoux": "La météo au Ventoux",
+    "association": "L'association",
+    "forums": "Les Forums"
   }
 }
