@@ -2,6 +2,7 @@
 import { useUserStore } from '@/stores/user'
 import Heading from '../kit/Heading.vue'
 import { useI18n } from 'vue-i18n'
+import Button from '../kit/Button.vue'
 
 const { t } = useI18n()
 

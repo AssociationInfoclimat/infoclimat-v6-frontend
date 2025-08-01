@@ -4,7 +4,7 @@ import Header from '@/components/Header.vue'
 </script>
 
 <template>
-  <div>
+  <div class="max-w-full overflow-x-hidden">
     <Header />
     <h1>Main Layout</h1>
     <div class="main-content">

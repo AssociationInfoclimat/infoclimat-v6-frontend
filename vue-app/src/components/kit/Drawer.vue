@@ -1,18 +1,49 @@
 <script setup lang="ts">
 import cx from 'classnames'
+import { onMounted, ref, watch } from 'vue'
 
-const props = defineProps<{
-  isOpen: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    isOpen: boolean
+    side?: 'left' | 'right'
+  }>(),
+  {
+    side: 'right',
+  },
+)
 
 const emit = defineEmits<{
   toggle: [show: boolean]
 }>()
+
+const isReady = ref(false)
+
+onMounted(() => {
+  if (props.isOpen) {
+    isReady.value = true
+  }
+})
+
+watch(
+  () => props.isOpen,
+  (newIsOpen) => {
+    if (newIsOpen) {
+      isReady.value = true
+    } else {
+      setTimeout(() => {
+        isReady.value = false
+      }, 300)
+    }
+  },
+)
 </script>
 
 <template>
-  <div :class="cx('drawer-overlay', { 'is-open': isOpen })" @click="emit('toggle', !isOpen)"></div>
-  <div :class="cx('drawer', { 'is-open': isOpen })">
+  <div
+    :class="cx('drawer-overlay', { 'is-open': isOpen, 'is-ready': isReady })"
+    @click="() => emit('toggle', !isOpen)"
+  ></div>
+  <div :class="cx('drawer', { 'is-open': isOpen }, `drawer--${side}`)">
     <slot />
   </div>
 </template>
@@ -25,10 +56,16 @@ const emit = defineEmits<{
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
   z-index: 1000;
-  display: none;
+  left: -100%;
+  transition: opacity 0.3s ease-in-out;
+  &.is-ready {
+    left: 0;
+  }
   &.is-open {
-    display: block;
+    opacity: 1;
+    left: 0;
   }
 }
 .drawer {
@@ -43,6 +80,16 @@ const emit = defineEmits<{
   transition: transform 0.3s ease-in-out;
   &.is-open {
     transform: translateX(0);
+  }
+
+  &.drawer--left {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+
+    &.is-open {
+      transform: translateX(0);
+    }
   }
 }
 </style>

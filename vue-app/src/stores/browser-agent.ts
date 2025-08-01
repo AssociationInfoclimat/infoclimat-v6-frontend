@@ -1,15 +1,21 @@
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useBrowserAgentStore = defineStore('browser-agent', () => {
   const isMobile = ref(false)
 
+  const handleResize = () => {
+    isMobile.value = window.innerWidth < 1024
+  }
+
   onMounted(() => {
     isMobile.value = window.innerWidth < 1024
+
+    window.addEventListener('resize', handleResize)
   })
 
-  window.addEventListener('resize', () => {
-    isMobile.value = window.innerWidth < 1024
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
   })
 
   return { isMobile }

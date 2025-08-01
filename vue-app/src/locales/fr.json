@@ -12,7 +12,8 @@
         "forums": "Forums"
       },
       "account": {
-        "login": "Connexion"
+        "login": "Connexion",
+        "logout": "Déconnexion"
       },
       "submenus": {
         "realTime": {

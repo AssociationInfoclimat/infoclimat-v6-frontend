@@ -11,7 +11,13 @@ const props = defineProps<{
   icon?: [IconPrefix, IconName] | IconProp
   tooltip?: string
   size?: 'default' | 'small'
-  variant?: 'primary' | 'transparent' | 'yellow-purple-gradient' | 'purple-pink-gradient'
+  variant?:
+    | 'primary'
+    | 'transparent'
+    | 'transparent-blue-dark'
+    | 'yellow-purple-gradient'
+    | 'purple-pink-gradient'
+    | 'green-dark'
 }>()
 
 const emit = defineEmits<{
@@ -27,11 +33,13 @@ const emit = defineEmits<{
       cx(
         'block whitespace-nowrap cursor-pointer',
         variant === 'primary' && 'bg-ic-red text-white',
-        variant === 'transparent' && 'bg-transparent text-white hover:bg-ic-blue-dark',
+        variant === 'transparent' && 'bg-transparent',
+        variant === 'transparent-blue-dark' && 'bg-transparent text-white hover:bg-ic-blue-dark',
         variant === 'yellow-purple-gradient' &&
           'bg-gradient-to-r from-ic-yellow-light to-ic-purple-light text-black',
         variant === 'purple-pink-gradient' &&
           'bg-gradient-to-r from-ic-purple-light to-ic-pink-light text-black',
+        variant === 'green-dark' && 'bg-ic-green-dark text-white',
         icon && !label
           ? `${size === 'small' ? 'h-6 w-6' : 'h-8 w-8'} items-center justify-center flex`
           : size === 'small'

@@ -3,8 +3,6 @@ import { useUserStore } from '@/stores/user'
 import { useI18n } from 'vue-i18n'
 import Button from '../kit/Button.vue'
 import { ref } from 'vue'
-import Modal from '../kit/Modal.vue'
-import Heading from '../kit/Heading.vue'
 import AccountMenuDrawerContent from './AccountMenuDrawerContent.vue'
 import Drawer from '../kit/Drawer.vue'
 const { t } = useI18n()
@@ -23,12 +21,12 @@ const isLoginModalOpen = ref(false)
       <Drawer :is-open="isLoginModalOpen" @toggle="isLoginModalOpen = !isLoginModalOpen">
         <AccountMenuDrawerContent />
       </Drawer>
-      <Button variant="transparent" @click="isLoginModalOpen = !isLoginModalOpen">
+      <Button variant="transparent-blue-dark" @click="isLoginModalOpen = !isLoginModalOpen">
         {{ user.user?.pseudo }}
       </Button>
     </div>
     <div v-else>
-      <Button variant="transparent" href="/include/connexion.php">{{
+      <Button variant="transparent-blue-dark" href="/include/connexion.php">{{
         t('header.topmenu.account.login')
       }}</Button>
       <!-- 
