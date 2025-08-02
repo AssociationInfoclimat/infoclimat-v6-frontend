@@ -1,4 +1,9 @@
-import type { GetBimResponse, GetBs2sResponse, GetChroniquesBqsResponse } from './chroniques.api.types'
+import type {
+  GetBimResponse,
+  GetBs2sResponse,
+  GetChroniquesBqsResponse,
+  GetMobileNewsResponse,
+} from './chroniques.api.types'
 import { get } from './common.api'
 
 export const getBqsNews = async () => {
@@ -23,6 +28,15 @@ export const getBimNews = async () => {
   const response = await get<GetBimResponse['responseData']>({
     provider: 'nestjs-v2',
     url: `/chroniques/bim`,
+    options: {},
+  })
+  return response
+}
+
+export const getMobileNews = async () => {
+  const response = await get<GetMobileNewsResponse['responseData']>({
+    provider: 'nestjs-v2',
+    url: `/chroniques/mobile`,
     options: {},
   })
   return response

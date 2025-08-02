@@ -4,8 +4,8 @@ import { useBrowserAgentStore } from '@/stores/browser-agent'
 import TopHeaderBar from '@/components/navbar/TopHeaderBar.vue'
 import SubHeaderBar from '@/components/navbar/SubHeaderBar.vue'
 import Icon from './kit/Icon.vue'
-import ResponsiveMobileMenu from './navbar/ResponsiveMobileMenu.vue'
 import Drawer from './kit/Drawer.vue'
+import ResponsiveMobileDrawerContent from './navbar/ResponsiveMobileDrawerContent.vue'
 
 const browserAgentStore = useBrowserAgentStore()
 const isMobile = computed(() => browserAgentStore.isMobile)
@@ -47,7 +47,7 @@ const toggleReponsiveMobileMenu = () => {
       @toggle="isReponsiveMobileMenuOpen = !isReponsiveMobileMenuOpen"
       side="left"
     >
-      <ResponsiveMobileMenu />
+      <ResponsiveMobileDrawerContent />
     </Drawer>
   </template>
 </template>

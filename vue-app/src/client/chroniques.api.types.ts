@@ -8,6 +8,16 @@ export type GetChroniquesBqsResponse = {
   }[]
 }
 
+export type GetBimResponse = {
+  responseData: {
+    id: number
+    title: string
+    published_at: string // DD/MM
+    summary: string
+    url: string // relative URL
+  }[]
+}
+
 export type GetBs2sResponse = {
   responseData: {
     id: number
@@ -17,12 +27,14 @@ export type GetBs2sResponse = {
   }[]
 }
 
-export type GetBimResponse = {
+export type GetMobileNewsResponse = {
   responseData: {
     id: number
+    type: 'bqs' | 'bim'
     title: string
     published_at: string // DD/MM
     summary: string
     url: string // relative URL
+    thumbnail?: string
   }[]
 }
