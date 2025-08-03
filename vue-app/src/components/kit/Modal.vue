@@ -8,7 +8,7 @@ const props = defineProps<{
 const slots = useSlots()
 
 const emit = defineEmits<{
-  toggle: [show: boolean]
+  hide: []
 }>()
 
 const isOpen = ref(props.isOpen)
@@ -22,16 +22,19 @@ watch(
 
 const isModalVisible = computed(() => isOpen.value)
 
-const onToggle = () => {
-  isOpen.value = !isOpen.value
-  emit('toggle', isOpen.value)
+const onHide = () => {
+  isOpen.value = false
+  emit('hide')
 }
 </script>
 
 <template>
   <transition name="fade">
-    <div v-if="isModalVisible" class="fixed inset-0 z-50 h-full w-full flex items-center justify-center">
-      <div @click="onToggle" class="absolute bg-black w-full h-full opacity-50 inset-0 z-0"></div>
+    <div
+      v-if="isModalVisible"
+      class="fixed inset-0 z-50 h-full w-full flex items-center justify-center"
+    >
+      <div @click="onHide" class="absolute bg-black w-full h-full opacity-50 inset-0 z-0"></div>
       <div class="max-w-lg p-3 relative mx-auto my-auto rounded shadow-lg bg-white min-w-[300px]">
         <div>
           <div class="p-3 flex-auto leading-6">

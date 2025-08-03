@@ -208,6 +208,21 @@
       }
     }
   },
+  "modals": {
+    "login": {
+      "title": "Connexion"
+    }
+  },
+  "forms": {
+    "labels": {
+      "email": "Email",
+      "password": "Mot de passe"
+    },
+    "placeholders": {
+      "email": "ex: monemail@exemple.com",
+      "password": "Votre mot de passe"
+    }
+  },
   "footer": {
     "scrollToTop": "Cliquez ici pour retourner en haut",
     "copyright": "Tous droits réservés – 2001-{ year }",

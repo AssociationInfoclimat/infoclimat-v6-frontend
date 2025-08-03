@@ -1,3 +1,17 @@
+## Preview
+
+We try to reproduce existing app in Vue3 + Nestjs backend.
+
+URLs are routing to PHP files that embed the Vue app (so we can keep SEO meta).
+
+Desktop version:
+
+![Vue app screenshot](./vue-app/screenshot.png)
+
+Responsive version:
+
+![Vue app screenshot](./vue-app/screenshot-mobile.png)
+
 ## How It Works
 
 We use PHP to handle nginx requests (`nginx -> PHP`) to host the Vue3 app as a simple PHP/HTML/JS app.

@@ -2,7 +2,7 @@ import { ref, computed, onMounted } from 'vue'
 import { defineStore } from 'pinia'
 import type { Me } from '@/client/user.api.types'
 import { UserStatus } from '@/client/user.api.types'
-import { getCookie } from '@/shared/utils'
+import { getCookie, removeCookie } from '@/shared/utils'
 import { getMe } from '@/client/user.api'
 
 export const useUserStore = defineStore('user', () => {
@@ -13,6 +13,15 @@ export const useUserStore = defineStore('user', () => {
   const setUser = (userData: Me | null) => {
     user.value = userData
     loading.value = false
+  }
+
+  const logout = () => {
+    loading.value = true
+    user.value = null
+    hasCookie.value = false
+    removeCookie('f_r_cookie')
+
+    location.reload()
   }
 
   onMounted(async () => {
@@ -32,5 +41,6 @@ export const useUserStore = defineStore('user', () => {
     hasCookie,
     loading,
     setUser,
+    logout,
   }
 })

@@ -18,6 +18,7 @@ const props = defineProps<{
     | 'yellow-purple-gradient'
     | 'purple-pink-gradient'
     | 'green-dark'
+  loading?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -55,6 +56,11 @@ const emit = defineEmits<{
     "
     @click="
       ($event) => {
+        if (loading) {
+          $event.preventDefault()
+          $event.stopPropagation()
+          return
+        }
         if (!href) {
           $event.preventDefault()
           emit('click', $event)
@@ -62,9 +68,14 @@ const emit = defineEmits<{
       }
     "
   >
+    <Icon
+      v-if="loading"
+      :icon="['fas', 'spinner']"
+      :class="cx('animate-spin', $slots.default && 'mr-1')"
+    />
     <slot v-if="$slots.default" />
     <template v-else>
-      <Icon v-if="icon" :icon="icon" />
+      <Icon v-if="icon && !loading" :icon="icon" />
       {{ label }}
     </template>
   </a>

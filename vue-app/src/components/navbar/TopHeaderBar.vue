@@ -47,7 +47,10 @@ const openOrClose = (menu: LEGACY_MENU) => {
     <div class="lg:w-ic-fixed-custom mx-auto flex flex-row">
       <div class="py-1">
         <form id="formsrch" method="get" action="/recherche/sphinx.php" onsubmit="">
-          <TextField :placeholder="t('header.topmenu.search')" />
+          <TextField
+            input-class="!p-1 !border-0 bg-white rounded opacity-50 focus:opacity-100"
+            :placeholder="t('header.topmenu.search')"
+          />
         </form>
       </div>
       <div class="flex-1 flex flex-row">

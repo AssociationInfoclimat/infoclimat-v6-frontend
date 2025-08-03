@@ -5,6 +5,7 @@ import Button from '../kit/Button.vue'
 import { ref } from 'vue'
 import AccountMenuDrawerContent from './AccountMenuDrawerContent.vue'
 import Drawer from '../kit/Drawer.vue'
+import LoginModal from '../modals/LoginModal.vue'
 const { t } = useI18n()
 
 const user = useUserStore()
@@ -26,21 +27,10 @@ const isLoginModalOpen = ref(false)
       </Button>
     </div>
     <div v-else>
-      <Button variant="transparent-blue-dark" href="/include/connexion.php">{{
+      <Button variant="transparent-blue-dark" @click="() => (isLoginModalOpen = true)">{{
         t('header.topmenu.account.login')
       }}</Button>
-      <!-- 
-      <Modal :is-open="isLoginModalOpen" @toggle="isLoginModalOpen = !isLoginModalOpen">
-        <template>
-          <Heading hx="1" class="text-center">{{ t('header.topmenu.account.login') }}</Heading>
-        </template>
-        <template #footer>
-          <Button variant="primary" @click="isLoginModalOpen = !isLoginModalOpen">{{
-            t('header.topmenu.account.login')
-          }}</Button>
-        </template>
-      </Modal>
-      -->
+      <LoginModal :open="isLoginModalOpen" @close="() => (isLoginModalOpen = false)" />
     </div>
   </div>
 </template>
