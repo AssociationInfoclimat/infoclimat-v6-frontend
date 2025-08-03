@@ -6,6 +6,7 @@ import Icon from '@/components/kit/Icon.vue'
 const props = defineProps<{
   label?: string
   href?: string
+  type?: 'a' | 'button' | 'submit-button'
   uppercase?: boolean
   rounded?: 'full'
   icon?: [IconPrefix, IconName] | IconProp
@@ -27,8 +28,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <a
-    :href="href"
+  <component
+    :is="type === 'a' ? 'a' : type === 'submit-button' ? 'button' : 'button'"
+    :type="type === 'submit-button' ? 'submit' : undefined"
+    :href="type === 'a' ? href : undefined"
     :title="tooltip"
     :class="
       cx(
@@ -55,16 +58,17 @@ const emit = defineEmits<{
       )
     "
     @click="
-      ($event) => {
+      ($event: MouseEvent) => {
         if (loading) {
           $event.preventDefault()
           $event.stopPropagation()
           return
         }
-        if (!href) {
+        if (!href && type !== 'submit-button') {
           $event.preventDefault()
           emit('click', $event)
         }
+        // Note: 'submit-button' triggers parent form submit event, so we don't need to prevent default
       }
     "
   >
@@ -78,7 +82,7 @@ const emit = defineEmits<{
       <Icon v-if="icon && !loading" :icon="icon" />
       {{ label }}
     </template>
-  </a>
+  </component>
 </template>
 
 <style scoped></style>

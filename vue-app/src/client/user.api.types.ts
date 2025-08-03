@@ -62,3 +62,13 @@ export type GetUserApiUserVignettesResponse = {
     photos_sprite_url: string
   }
 }
+
+export type PostUserLoginApiResponse = {
+  payload: {
+    username: string
+    password: string
+  }
+  responseData: {
+    cookie_token: string
+  }
+}

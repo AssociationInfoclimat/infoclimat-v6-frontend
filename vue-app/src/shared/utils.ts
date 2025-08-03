@@ -10,3 +10,17 @@ export const getCookie = (name: string): string | null => {
 export const removeCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
 }
+
+export const setCookie = ({
+  name,
+  value,
+  expiresAt,
+  path,
+}: {
+  name: string
+  value: string
+  expiresAt: Date
+  path: string
+}) => {
+  document.cookie = `${name}=${value}; path=${path}; expires=${expiresAt}`
+}

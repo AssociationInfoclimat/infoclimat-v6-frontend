@@ -215,12 +215,21 @@
   },
   "forms": {
     "labels": {
+      "username": "Nom d'utilisateur / Pseudo",
       "email": "Email",
       "password": "Mot de passe"
     },
     "placeholders": {
-      "email": "ex: monemail@exemple.com",
+      "username": "ex: monpseudo",
+      "email": "{'ex: monemail@exemple.com'}",
       "password": "Votre mot de passe"
+    }
+  },
+  "errors": {
+    "unknown": "Une erreur inconnue est survenue, Veuillez réessayer plus tard ou contacter le support.",
+    "auth": {
+      "invalid_credentials": "Identifiants invalides",
+      "too_many_attempts_in_1_minute": "Trop de tentatives de connexion échouées. Veuillez réessayer dans 1 minute."
     }
   },
   "footer": {
