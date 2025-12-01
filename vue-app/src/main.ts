@@ -1,3 +1,6 @@
+// Initialize OpenTelemetry first, before any other imports
+import './telemetry'
+
 import './assets/main.css'
 
 import { createApp } from 'vue'
