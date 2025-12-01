@@ -16,6 +16,15 @@ export default defineConfig({
     // vueDevTools(), // I dont need it right now
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/otel': {
+        target: 'http://192.168.4.5:4318',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/otel/, ''),
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
