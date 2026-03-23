@@ -6,12 +6,11 @@ import Header from '@/components/Header.vue'
 <template>
   <div class="max-w-full overflow-x-hidden">
     <Header />
-    <h1>Main Layout</h1>
-    <div class="main-content">
+    <div class="main-content min-h-80">
       <slot />
     </div>
     <Footer />
   </div>
 </template>
 
-<style></style>
+<style scoped></style>

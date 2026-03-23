@@ -57,6 +57,11 @@ export const useUserStore = defineStore('user', () => {
     hasCookie,
     loading,
     setUser,
+    // est responsable technique?
+    // TODO: check it
+    isResponsableTechnique: computed(() =>
+      user.value?.statuses.includes(UserStatus.RESPONSABLE_TECHNIQUE),
+    ),
     // authentification
     login,
     logout,
