@@ -34,7 +34,6 @@ type LegacyWindow = Window &
     _lieuxPrefs?: Record<string, unknown> | LieuPref[]
     updateParamFromMap?: (...args: any[]) => any
     overlayLayer?: (...args: any[]) => any
-    checkUpdates?: (...args: any[]) => any
   }
 
 const getScriptId = (key: string) => `legacy-map-script-${key}`
@@ -153,8 +152,6 @@ function runInitialLegacyLayerSelection(legacyWindow: LegacyWindow) {
   } else {
     legacyWindow.updateParamFromMap?.('meteoalerte', false, true)
   }
-  // TODO:
-  //legacyWindow.checkUpdates?.()
 }
 
 onMounted(() => {
@@ -175,22 +172,25 @@ onMounted(() => {
       //   'https://static.infoclimat.net/include/js/push.js',
       //   getScriptId('push'),
       // )
-      await loadExternalScript(
-        'https://static.infoclimat.net/include/js/raphael.js',
-        getScriptId('raphael'),
-      )
-      await loadExternalScript(
-        'https://static.infoclimat.net/include/js/leaflet-hash.js',
-        getScriptId('leaflet-hash'),
-      )
-      await loadExternalScript(
-        'https://static.infoclimat.net/include/js/leaflet.raphael.js',
-        getScriptId('leaflet-raphael'),
-      )
-      await loadExternalScript(
-        'https://static.infoclimat.net/include/js/idx_canvas.js',
-        getScriptId('idx-canvas'),
-      )
+
+      //    await loadExternalScript(
+      //      'https://static.infoclimat.net/include/js/raphael.js',
+      //      getScriptId('raphael'),
+      //    )
+      //    await loadExternalScript(
+      //      'https://static.infoclimat.net/include/js/leaflet-hash.js',
+      //      getScriptId('leaflet-hash'),
+      //    )
+      //    await loadExternalScript(
+      //      'https://static.infoclimat.net/include/js/leaflet.raphael.js',
+      //      getScriptId('leaflet-raphael'),
+      //    )
+      //    await loadExternalScript(
+      //      'https://static.infoclimat.net/include/js/idx_canvas.js',
+      //      getScriptId('idx-canvas'),
+      //    )
+
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
       await homepageDataMapStore.loadBootstrapData()
 
