@@ -8,7 +8,7 @@ import TopHeaderLink from '../TopHeaderLink.vue'
 import type { GetPreviApiCommonRegionsDeptsResponse } from '@/client/previ.api.types'
 
 const forecast = ref<AdaptedWeatherForecast | null>(null)
-const commonRegionsDepts = ref<GetPreviApiCommonRegionsDeptsResponse['responseData']>([])
+const commonRegionsDepts = ref<GetPreviApiCommonRegionsDeptsResponse['responseData']['items']>([])
 
 onMounted(async () => {
   // Widget bleu des prévisions

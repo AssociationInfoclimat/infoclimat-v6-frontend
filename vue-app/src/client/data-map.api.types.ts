@@ -116,6 +116,10 @@ export type DataMapConfigResponseData = {
   is_night_time: boolean
 }
 
-export type GetDataMapTokenResponse = {
+export type GetDataMapDataResponse = {
   responseData: DataMapConfigResponseData
+}
+
+export type GetDataMapTokenResponse = {
+  responseData: string
 }

@@ -62,5 +62,5 @@ export const getCommonRegionsDepts = async () => {
     url: `/previ/common-regions-depts`,
     options: {},
   })
-  return response
+  return response.items
 }

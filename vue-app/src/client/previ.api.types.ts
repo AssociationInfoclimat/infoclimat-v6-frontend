@@ -79,9 +79,11 @@ export type PostPreviApiForecastResponse = {
 
 export type GetPreviApiCommonRegionsDeptsResponse = {
   responseData: {
-    id: number
-    label: string
-    updatedAt: string
-    url: string
-  }[]
+    items: {
+      id: number
+      label: string
+      updated_at: string
+      url: string
+    }[]
+  }
 }

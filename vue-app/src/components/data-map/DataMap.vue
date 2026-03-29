@@ -144,9 +144,7 @@ function runInitialLegacyLayerSelection(legacyWindow: LegacyWindow) {
               ? 'irAhdbtrans'
               : 'vishdbtrans'
             : overlayKey
-        console.log('runInitialLegacyLayerSelection', finalKey)
         legacyWindow.overlayLayer?.(finalKey)
-        console.log('runInitialLegacyLayerSelection after', finalKey)
       })
     }
   } else {

@@ -5,6 +5,7 @@ import type {
   DataMapBackendTileInfo,
   DataMapConfigResponseData,
   DefaultMapConf,
+  GetDataMapDataResponse,
   GetDataMapTokenResponse,
   IcMapConfig,
   LieuPref,
@@ -115,7 +116,7 @@ const normalizeAnimFrame = (frame: DataMapBackendAnimFrame) => {
 }
 
 const normalizeIcMapConfig = (
-  responseData: GetDataMapTokenResponse['responseData'],
+  responseData: GetDataMapDataResponse['responseData'],
 ): IcMapConfig => {
   const ltilesEntries = Object.entries(responseData.ltiles).map(([key, tile]) => {
     const originalKey = key as keyof DataMapConfigResponseData['ltiles']
@@ -142,7 +143,7 @@ const normalizeIcMapConfig = (
 }
 
 export const getDataMapConfig = async () => {
-  const response = await get<GetDataMapTokenResponse['responseData']>({
+  const response = await get<GetDataMapDataResponse['responseData']>({
     provider: 'nestjs-v2',
     url: '/homepage-map-data',
     options: {},
@@ -151,7 +152,12 @@ export const getDataMapConfig = async () => {
 }
 
 export const getDataMapToken = async () => {
-  return '<TEST_TOKEN_HERE>'
+  const response = await get<GetDataMapTokenResponse['responseData']>({
+    provider: 'nestjs-v2',
+    url: '/homepage-map-token',
+    options: {},
+  })
+  return response
 }
 
 export const getDataMapDefaultConf = async (): Promise<DefaultMapConf> => {
