@@ -10,6 +10,8 @@ import VignetteVigilance from '@/components/vignettes/VignetteVigilance.vue'
 import type { GetPhotoliveVignettesResponse } from '@/client/misc.api.types'
 import { getPhotoliveVignettes } from '@/client/misc.api'
 
+const NB_VIGNETTES_TO_SHOW = 8
+
 // $.getJSON('/photolive/vignettes/infos.json', {dt: new Date().getTime()}, function (d) {
 const vignettePhotosInformation = ref<GetPhotoliveVignettesResponse['responseData'] | null>(null)
 const vignettes = ref<GetUserApiUserVignettesResponse['responseData']>({
@@ -23,10 +25,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-row gap-2 h-full items-center">
+  <div class="flex flex-row gap-4 h-full items-center">
     <template v-for="(vignette, index) in vignettes.vignettes" :key="index">
       <!-- Used to show "APPEL AU DON" on k=5 -->
-      <template v-if="index < 5">
+      <template v-if="index < NB_VIGNETTES_TO_SHOW">
         <VignettePhoto
           v-if="vignette.type === 'photo'"
           :photo="vignette"

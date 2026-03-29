@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HeaderVignettes from '@/components/navbar/SubHeaderVignettes.vue'
-import AskForDonationDesktopBanner from '../AskForDonationDesktopBanner.vue'
+// import AskForDonationDesktopBanner from '../AskForDonationDesktopBanner.vue'
 </script>
 
 <template>
@@ -12,9 +12,10 @@ import AskForDonationDesktopBanner from '../AskForDonationDesktopBanner.vue'
       <div class="header-menu flex-1">
         <HeaderVignettes />
       </div>
-      <div class="w-96 py-2">
+      <!-- When Donations are back, uncomment this -->
+      <!-- <div class="w-96 py-2">
         <AskForDonationDesktopBanner />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
