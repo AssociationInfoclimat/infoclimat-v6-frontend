@@ -25,24 +25,84 @@ export const useHomepageDataMapStore = defineStore('homepageDataMap', () => {
   const bootstrapError = ref<string | null>(null)
 
   const icMapConfig = ref<IcMapConfig | null>(null)
-  const icMapToken = ref<string>('')
+  const icMapToken = ref('')
   const defaultConf = ref<DefaultMapConf | null>(null)
   const lieuxPrefs = ref<LieuPref[]>([])
 
   const mapDataMenuSelected = ref<AvailableMenu>('observations')
 
-  const setMapDataMenuSelected = (menu: AvailableMenu) => {
-    console.log('setMapDataMenuSelected', menu)
+  const activeBase = ref('')
+  const activeOverlays = ref<string[]>([])
+
+  // ── Menu ─────────────────────────────────────────────────
+
+  function setMapDataMenuSelected(menu: AvailableMenu) {
     mapDataMenuSelected.value = menu
   }
 
+  // ── Param resolution helpers ─────────────────────────────
+
+  function normalizeParam(param: string): string {
+    if (param === 'MCanalysis') return 'mCanalysis'
+    return param
+  }
+
+  function resolveNightTime(param: string): string {
+    if (!icMapConfig.value?.isNightTime) return param
+    if (param === 'vis') return 'irA'
+    if (param === 'vishdbtrans') return 'irAhdbtrans'
+    return param
+  }
+
+  function resolveOverlayKey(key: string): string {
+    if (key === 'SAT_AUTO') {
+      return icMapConfig.value?.isNightTime ? 'irAhdbtrans' : 'vishdbtrans'
+    }
+    return normalizeParam(key)
+  }
+
+  // ── Layer state management ───────────────────────────────
+
+  function setBaseLayer(key: string) {
+    activeBase.value = resolveNightTime(normalizeParam(key))
+    const keepCities = activeOverlays.value.includes('cities')
+    activeOverlays.value = keepCities ? ['cities'] : []
+  }
+
+  function toggleOverlay(key: string) {
+    const resolved = resolveOverlayKey(key)
+    let overlays = [...activeOverlays.value]
+    const idx = overlays.indexOf(resolved)
+
+    if (idx >= 0) {
+      overlays.splice(idx, 1)
+      if (resolved === 'radaric') {
+        overlays = overlays.filter((k) => k !== 'nexrad')
+      }
+    } else {
+      if (resolved === 'frT') {
+        overlays = overlays.filter((k) => k !== 'mCanalysis' && k !== 'MCanalysis')
+      } else if (resolved === 'mCanalysis') {
+        overlays = overlays.filter((k) => k !== 'frT')
+      }
+      overlays.push(resolved)
+      if (resolved === 'radaric' && !overlays.includes('nexrad')) {
+        overlays.push('nexrad')
+      }
+    }
+
+    activeOverlays.value = overlays
+  }
+
+  function applyConf(conf: DefaultMapConf) {
+    activeBase.value = resolveNightTime(normalizeParam(conf.base))
+    activeOverlays.value = conf.overlays.map(resolveOverlayKey)
+  }
+
+  // ── Bootstrap ────────────────────────────────────────────
+
   const loadBootstrapData = async () => {
-    if (isBootstrapLoading.value) {
-      return
-    }
-    if (bootstrapReady.value) {
-      return
-    }
+    if (isBootstrapLoading.value || bootstrapReady.value) return
 
     isBootstrapLoading.value = true
     bootstrapError.value = null
@@ -78,7 +138,12 @@ export const useHomepageDataMapStore = defineStore('homepageDataMap', () => {
     defaultConf,
     lieuxPrefs,
     mapDataMenuSelected,
+    activeBase,
+    activeOverlays,
     setMapDataMenuSelected,
+    setBaseLayer,
+    toggleOverlay,
+    applyConf,
     loadBootstrapData,
   }
 })

@@ -14,54 +14,6 @@ import type {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-// const getBaseTileInfo = (): MapTileInfo => {
-//   const now = new Date()
-//   return {
-//     year: now.getUTCFullYear(),
-//     month: now.getUTCMonth() + 1,
-//     day: now.getUTCDate(),
-//     hour: now.getUTCHours(),
-//     minute: now.getUTCMinutes(),
-//   }
-// }
-//
-// const mkTile = (
-//   baseInfo: MapTileInfo,
-//   key: IcMapConfig['ltiles'][string]['key'] = 'mock-key',
-// ): IcMapConfig['ltiles'][string] => ({
-//   info: { ...baseInfo },
-//   key,
-// })
-//
-// const buildMockIcMapConfig = (): IcMapConfig => {
-//   const baseInfo = getBaseTileInfo()
-//   return {
-//     isNightTime: false,
-//     ltiles: {
-//       meteoalerte: mkTile(baseInfo),
-//       radaric: mkTile(baseInfo),
-//       nexrad: mkTile(baseInfo),
-//       foudre: {
-//         info: {
-//           ...baseInfo,
-//           last_stroke: 0,
-//         },
-//         key: 'mock-key',
-//       },
-//       clouds: mkTile(baseInfo),
-//       MCanalysis: mkTile(baseInfo),
-//       frT: mkTile(baseInfo),
-//       estofex: mkTile(baseInfo),
-//       vis: mkTile(baseInfo),
-//       irA: mkTile(baseInfo),
-//       vishdbtrans: mkTile(baseInfo),
-//       irAhdbtrans: mkTile(baseInfo),
-//       cities: mkTile(baseInfo),
-//     },
-//     lanim: {},
-//   }
-// }
-
 const normalizeLegacyLayerKey = (
   key: keyof DataMapConfigResponseData['ltiles'],
 ): keyof IcMapConfig['ltiles'] => {
