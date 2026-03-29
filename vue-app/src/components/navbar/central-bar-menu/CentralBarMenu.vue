@@ -4,12 +4,12 @@ import CentralBarMenuItem from './CentralBarMenuItem.vue'
 import { useHomepageDataMapStore } from '@/stores/homepage-data-map'
 import { storeToRefs } from 'pinia'
 
-const { setMapDataMenuSelected } = useHomepageDataMapStore()
+const { setMapDataMenuSelected, setBaseLayer } = useHomepageDataMapStore()
 const { mapDataMenuSelected: selectedMenu } = storeToRefs(useHomepageDataMapStore())
 
 type Param =
-  | 'meteoalerte'
-  | 'radaric'
+  | 'meteoalerte' // Précipitations avec nuages
+  | 'radaric' // Précipitations
   | 'foudre'
   | 'foudre-live'
   | 'vishdbtrans'
@@ -40,9 +40,15 @@ const updateMapData = (param: Param): void => {
   switch (param) {
     case 'meteoalerte':
       setMapDataMenuSelected('observations')
+      setBaseLayer('meteoalerte')
       break
     case 'radaric':
       setMapDataMenuSelected('precipitations')
+      setBaseLayer('radaric')
+      break
+    case 'temperature':
+      setMapDataMenuSelected('temperature')
+      setBaseLayer('temperature')
       break
     default:
   }

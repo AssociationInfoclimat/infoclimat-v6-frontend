@@ -1,3 +1,5 @@
+import type { BaseLayerParam, OverlayParamWithAutoSat } from '@/stores/homepage-data-map.types'
+
 export type MapTileInfo = {
   year: string
   month: string
@@ -11,7 +13,7 @@ export type MapTileConfig = {
   key: string | false
 }
 
-export type IcMapConfig = {
+export type IcMapConfigApiResponse = {
   isNightTime: boolean
   ltiles: {
     ac12hradaric: MapTileConfig
@@ -50,8 +52,8 @@ export type IcMapConfig = {
 }
 
 export type DefaultMapConf = {
-  base: string
-  overlays: string[]
+  base: BaseLayerParam
+  overlays: OverlayParamWithAutoSat[]
 }
 
 export type LieuPref = {
@@ -122,4 +124,26 @@ export type GetDataMapDataResponse = {
 
 export type GetDataMapTokenResponse = {
   responseData: string
+}
+
+// ── Observation markers ──────────────────────────────────
+
+export type ObservationMarkerData = {
+  id: string
+  lat: number
+  lon: number
+  icon: string
+  size: [number, number]
+  anchor: [number, number]
+  type: string
+  time: string
+  stid?: string
+}
+
+export type ObservationsApiResponse = {
+  DATA: ObservationMarkerData[]
+}
+
+export type ObservationDetailApiResponse = {
+  DATA: Record<string, unknown>
 }

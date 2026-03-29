@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { get } from './common.api'
 import type {
   DataMapBackendAnimFrame,
@@ -7,16 +8,19 @@ import type {
   DefaultMapConf,
   GetDataMapDataResponse,
   GetDataMapTokenResponse,
-  IcMapConfig,
+  IcMapConfigApiResponse,
   LieuPref,
   MapTileInfo,
+  ObservationMarkerData,
+  ObservationsApiResponse,
+  ObservationDetailApiResponse,
 } from './data-map.api.types'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const normalizeLegacyLayerKey = (
   key: keyof DataMapConfigResponseData['ltiles'],
-): keyof IcMapConfig['ltiles'] => {
+): keyof IcMapConfigApiResponse['ltiles'] => {
   // Since we sankified the backend, we need to normalize the keys to the new format.
   if (key === 'ir_ahdbtrans') {
     return 'irAhdbtrans'
@@ -69,7 +73,7 @@ const normalizeAnimFrame = (frame: DataMapBackendAnimFrame) => {
 
 const normalizeIcMapConfig = (
   responseData: GetDataMapDataResponse['responseData'],
-): IcMapConfig => {
+): IcMapConfigApiResponse => {
   const ltilesEntries = Object.entries(responseData.ltiles).map(([key, tile]) => {
     const originalKey = key as keyof DataMapConfigResponseData['ltiles']
     const normalizedKey = normalizeLegacyLayerKey(originalKey)
@@ -128,4 +132,70 @@ export const getDataMapLieuxPrefs = async (): Promise<LieuPref[]> => {
     { lat: 48.8566, lon: 2.3522, lieu: 'Paris' },
     { lat: 43.2965, lon: 5.3698, lieu: 'Marseille' },
   ]
+}
+
+// ── Observation markers API (mobile-api) ─────────────────
+
+export const getObservationMarkers = async (
+  params: {
+    north: number
+    south: number
+    east: number
+    west: number
+    zoom: number
+    year: string
+    month: string
+    day: string
+    hour: string
+    token: string
+    webcams?: boolean
+  },
+  signal?: AbortSignal,
+): Promise<ObservationMarkerData[]> => {
+  const response = await get<ObservationsApiResponse>({
+    provider: 'nestjs-v2',
+    url: '/carte-observations',
+    options: {
+      params: {
+        north: params.north,
+        south: params.south,
+        east: params.east,
+        west: params.west,
+        z: params.zoom,
+        year: params.year,
+        month: params.month,
+        day: params.day,
+        hour: params.hour,
+        unique_token: params.token,
+        webcams: params.webcams ? 1 : 0,
+        intelligent_cluster: 1,
+        shadow: 1,
+      },
+      signal,
+    },
+  })
+  return response.DATA
+}
+
+const mobileApi = axios.create({
+  baseURL: 'https://mobile-api.infoclimat.fr/v1.0/internal/-/get',
+})
+
+export const getObservationDetail = async (
+  params: {
+    id: string
+    token: string
+  },
+  signal?: AbortSignal,
+): Promise<Record<string, unknown>> => {
+  const { data } = await mobileApi.get<ObservationDetailApiResponse>('/observation', {
+    params: {
+      thumb_width: 200,
+      thumb_height: 100,
+      id: params.id,
+      unique_token: params.token,
+    },
+    signal,
+  })
+  return data.DATA
 }

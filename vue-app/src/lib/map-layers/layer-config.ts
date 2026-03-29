@@ -1,5 +1,6 @@
 import type { MapTileInfo } from '@/client/data-map.api.types'
 import type { GeoJsonFeatureStyle } from './types'
+import type { WMSParams } from 'leaflet'
 
 const TILE_KEY = import.meta.env.VITE_TILE_KEY ?? ''
 
@@ -9,7 +10,7 @@ const URL_TEMPLATE_MAPBOX = `//{s}.tempsreel.infoclimat.net/t-mapbox/{mkey}/{z}/
 
 // ── WMS defaults ──────────────────────────────────────────────
 
-export const DEFAULT_WMS_PARAMS = {
+export const DEFAULT_WMS_PARAMS: Omit<WMSParams, 'layers'> = {
   service: 'WMS',
   version: '1.3.0',
   request: 'GetMap',
@@ -17,7 +18,7 @@ export const DEFAULT_WMS_PARAMS = {
   transparent: true,
   width: 256,
   height: 256,
-  tiled: true,
+  // tiled: true,
 } as const
 
 // ── Layer descriptions ────────────────────────────────────────
@@ -209,13 +210,7 @@ export const NEXRAD_BOUNDS: [lngWest: number, lngEast: number, latSouth: number,
 
 // ── Overlays that require coastlines ──────────────────────────
 
-export const NEEDS_COASTLINES_SET = new Set([
-  'vis',
-  'irA',
-  'radaric',
-  'vishdbtrans',
-  'irAhdbtrans',
-])
+export const NEEDS_COASTLINES_SET = new Set(['vis', 'irA', 'radaric', 'vishdbtrans', 'irAhdbtrans'])
 
 // ── Public helpers ────────────────────────────────────────────
 

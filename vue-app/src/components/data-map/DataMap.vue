@@ -8,9 +8,8 @@ const store = useHomepageDataMapStore()
 const { isBootstrapLoading, bootstrapError } = storeToRefs(store)
 
 const mapEl = ref<HTMLElement | null>(null)
-const legendEl = ref<HTMLElement | null>(null)
 
-const { initMap } = useLeafletMap(mapEl, legendEl)
+const { initMap, legendVisible, legendX, legendY, legendHtml } = useLeafletMap(mapEl)
 
 onMounted(async () => {
   try {
@@ -24,6 +23,10 @@ onMounted(async () => {
       store.applyConf(store.defaultConf)
     }
 
+    if (!store.activeBase) {
+      console.error('activeBase is not set')
+      return
+    }
     initMap({
       base: store.activeBase,
       overlays: [...store.activeOverlays],
@@ -42,7 +45,12 @@ onMounted(async () => {
     </div>
     <div class="data-map__container">
       <div ref="mapEl" class="data-map__leaflet" />
-      <div ref="legendEl" class="data-map__legend" />
+      <div
+        v-show="legendVisible"
+        class="data-map__legend"
+        :style="{ top: `${legendY}px`, left: `${legendX}px` }"
+        v-html="legendHtml"
+      />
     </div>
   </div>
 </template>
@@ -75,7 +83,6 @@ onMounted(async () => {
 
 .data-map__legend {
   position: absolute;
-  display: none;
   z-index: 1000;
   padding: 0.35rem 0.5rem;
   border-radius: 0.25rem;
