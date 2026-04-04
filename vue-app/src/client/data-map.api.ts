@@ -74,26 +74,24 @@ const normalizeAnimFrame = (frame: DataMapBackendAnimFrame) => {
 const normalizeIcMapConfig = (
   responseData: GetDataMapDataResponse['responseData'],
 ): IcMapConfigApiResponse => {
-  const ltilesEntries = Object.entries(responseData.ltiles).map(([key, tile]) => {
-    const originalKey = key as keyof DataMapConfigResponseData['ltiles']
-    const normalizedKey = normalizeLegacyLayerKey(originalKey)
-    return [
-      normalizedKey,
-      {
-        info: normalizeTileInfo(tile.info),
-        key: tile.key ?? false,
-      },
-    ] as const
-  })
+  const ltiles: Partial<IcMapConfigApiResponse['ltiles']> = {}
+  // As we looped on all the keys, we can fill the whole ltiles object with the normalized keys.
+  for (const [key, tile] of Object.entries(responseData.ltiles)) {
+    ltiles[normalizeLegacyLayerKey(key as keyof DataMapConfigResponseData['ltiles'])] = {
+      info: normalizeTileInfo(tile.info),
+      key: tile.key ?? false,
+    }
+  }
+  const ltilesFilled = ltiles as IcMapConfigApiResponse['ltiles']
 
   const lanimEntries = Object.entries(responseData.lanim).map(([key, frames]) => {
-    const normalizedKey = normalizeLegacyLayerKey(key)
+    const normalizedKey = normalizeLegacyLayerKey(key as keyof DataMapConfigResponseData['ltiles'])
     return [normalizedKey, frames.map(normalizeAnimFrame)] as const
   })
 
   return {
     isNightTime: responseData.is_night_time,
-    ltiles: Object.fromEntries(ltilesEntries),
+    ltiles: ltilesFilled,
     lanim: Object.fromEntries(lanimEntries),
   }
 }
