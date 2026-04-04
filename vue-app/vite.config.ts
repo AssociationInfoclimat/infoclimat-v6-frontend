@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     vue({
       template: {
@@ -19,6 +19,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      ...(isSsrBuild
+        ? {
+            leaflet: fileURLToPath(new URL('./src/ssr-stubs/leaflet.ts', import.meta.url)),
+            'leaflet-gesture-handling': fileURLToPath(
+              new URL('./src/ssr-stubs/empty.ts', import.meta.url),
+            ),
+            'leaflet.wms': fileURLToPath(new URL('./src/ssr-stubs/empty.ts', import.meta.url)),
+          }
+        : {}),
     },
   },
   build: {
@@ -30,4 +39,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
