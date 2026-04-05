@@ -147,3 +147,49 @@ export type ObservationsApiResponse = {
 export type ObservationDetailApiResponse = {
   DATA: Record<string, unknown>
 }
+
+// - Station detail API (mobile-api) ─────────────────
+
+export type StationMarkerData = {
+  id: string
+  lat: number
+  lon: number
+  t: string
+  icon: string
+  size: [number, number]
+  anchor: [number, number]
+  _uid: string
+  auid: string
+  _ty: string
+  meta: Record<string, unknown>
+}
+
+export type StationDetailApiResponse = {
+  DATA: StationMarkerData[]
+}
+
+export type StationDetail = {
+  genre: string
+  id_station: string
+  libelle?: string
+  altitude?: number
+  temperature?: number
+  temperature_couleur?: string
+  humidite?: number
+  humidite_couleur?: string
+  pression?: number
+  pression_couleur?: string
+  vent_moyen?: number
+  vent_rafales?: number
+  pluie_1h?: number
+  temperature_eau?: number
+  temperature_eau_couleur?: string
+  hauteur_vagues?: number
+  temps?: string
+  pictogramme?: string
+  _wcam?: string
+}
+
+export type StationDetailGetApiResponse = {
+  DATA: StationDetail
+}

@@ -10,7 +10,8 @@ const URL_TEMPLATE_MAPBOX = `//{s}.tempsreel.infoclimat.net/t-mapbox/{mkey}/{z}/
 
 // ── WMS defaults ──────────────────────────────────────────────
 
-export const DEFAULT_WMS_PARAMS: Omit<WMSParams, 'layers'> = {
+// The URLs usually contained ?titled=true in legacy, even if not valid according to the WMS specification.
+export const DEFAULT_WMS_PARAMS: Omit<WMSParams, 'layers'> & { tiled: boolean } = {
   service: 'WMS',
   version: '1.3.0',
   request: 'GetMap',
@@ -18,7 +19,8 @@ export const DEFAULT_WMS_PARAMS: Omit<WMSParams, 'layers'> = {
   transparent: true,
   width: 256,
   height: 256,
-  // tiled: true,
+  // This one is not valid according to the type:
+  tiled: true,
 } as const
 
 // ── Layer descriptions ────────────────────────────────────────

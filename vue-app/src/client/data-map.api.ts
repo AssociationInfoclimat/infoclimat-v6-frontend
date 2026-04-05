@@ -14,6 +14,10 @@ import type {
   ObservationMarkerData,
   ObservationsApiResponse,
   ObservationDetailApiResponse,
+  StationDetail,
+  StationDetailApiResponse,
+  StationDetailGetApiResponse,
+  StationMarkerData,
 } from './data-map.api.types'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -191,6 +195,72 @@ export const getObservationDetail = async (
       thumb_width: 200,
       thumb_height: 100,
       id: params.id,
+      unique_token: params.token,
+    },
+    signal,
+  })
+  return data.DATA
+}
+
+//-- Station detail API (mobile-api) ─────────────────
+
+export const getStationsMarkers = async (
+  params: {
+    param: 'temperature' | 'temperature_min' | 'temperature_max'
+    north: number
+    south: number
+    east: number
+    west: number
+    zoom: number
+    year: string
+    month: string
+    day: string
+    hour: string
+  },
+  signal?: AbortSignal,
+): Promise<StationMarkerData[]> => {
+  const response = await get<StationDetailApiResponse>({
+    provider: 'nestjs-v2',
+    url: '/carte-station',
+    options: {
+      params: {
+        param: params.param,
+        north: params.north,
+        south: params.south,
+        east: params.east,
+        west: params.west,
+        year: params.year,
+        month: params.month,
+        day: params.day,
+        hour: params.hour,
+        z: params.zoom,
+        // retina: params.retina,
+        // density: params.density,
+      },
+      signal,
+    },
+  })
+  return response.DATA
+}
+
+export const getStationDetail = async (
+  params: {
+    id: string
+    year: string
+    month: string
+    day: string
+    hour: string
+    token: string
+  },
+  signal?: AbortSignal,
+): Promise<StationDetail> => {
+  const { data } = await mobileApi.get<StationDetailGetApiResponse>('/carte/station/get', {
+    params: {
+      id: params.id,
+      year: params.year,
+      month: params.month,
+      day: params.day,
+      hour: params.hour,
       unique_token: params.token,
     },
     signal,

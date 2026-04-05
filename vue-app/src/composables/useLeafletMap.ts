@@ -1,10 +1,15 @@
 import { type Ref, shallowRef, ref, watch, onBeforeUnmount } from 'vue'
-import L, { tileLayer, type WMSOptions } from 'leaflet'
+import L, { tileLayer as leafletTileLayer, type WMSOptions } from 'leaflet'
 import wms from 'leaflet.wms'
 import { GestureHandling } from 'leaflet-gesture-handling'
 import { useHomepageDataMapStore } from '@/stores/homepage-data-map'
-import type { IcMapConfigApiResponse, LieuPref, ObservationMarkerData } from '@/client/data-map.api.types'
-import { getObservationMarkers, getObservationDetail } from '@/client/data-map.api'
+import type { IcMapConfigApiResponse, LieuPref, StationDetail } from '@/client/data-map.api.types'
+import {
+  getObservationMarkers,
+  getObservationDetail,
+  getStationsMarkers,
+  getStationDetail,
+} from '@/client/data-map.api'
 import type { ApiTileLayerKey } from '@/lib/map-layers/types'
 import {
   DEFAULT_WMS_PARAMS,
@@ -18,6 +23,18 @@ import type {
   BaseLayerParamWithNightLayerParam,
   OverlayParam,
 } from '@/stores/homepage-data-map.types'
+
+// We need to override the type to add the NOTRANSPARENCY property
+type ICWMSOptions = Omit<WMSOptions, 'NOTRANSPARENCY'> & {
+  NOTRANSPARENCY?: 1 | 0
+}
+// We need to override tileLayer.wms to add the NOTRANSPARENCY property
+const tileLayer = {
+  ...leafletTileLayer,
+  wms: function (baseUrl: string, options?: ICWMSOptions): L.TileLayer.WMS {
+    return leafletTileLayer.wms(baseUrl, options)
+  },
+}
 
 const DEFAULT_CENTER: L.LatLngTuple = [46.5, 2.42 + 7.14 / 2]
 const DEFAULT_ZOOM = 6
@@ -73,6 +90,10 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
   let hoverTimeout: ReturnType<typeof setTimeout> | null = null
   let markersAbortController: AbortController | null = null
 
+  let stationsGroup: L.LayerGroup
+  const stationsCache = new Map<string, StationDetail>()
+  let stationsAbortController: AbortController | null = null
+
   // ── Legend tooltip ────────────────────────────────────────
 
   const legendVisible = ref(false)
@@ -118,7 +139,9 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
   async function loadObservationMarkers() {
     const map = leafletMap.value
     const config = store.icMapConfig
-    if (!map || !config || !store.displayMarkers) return
+    if (!map || !config || !store.displayMarkers) {
+      return
+    }
 
     if (markersAbortController) {
       markersAbortController.abort()
@@ -150,7 +173,9 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
         signal,
       )
 
-      if (signal.aborted) return
+      if (signal.aborted) {
+        return
+      }
 
       for (const obs of observations) {
         L.marker([obs.lat, obs.lon], {
@@ -223,6 +248,186 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     markersGroup.clearLayers()
   }
 
+  // ── Station markers ─────────────────────────────────────
+
+  function formatStationTooltip(data: StationDetail): string {
+    const w = 100
+    let html = ''
+
+    if (data.genre === 'bouees') {
+      html += `<b class="degrade-vertical-gris" style="color:black;text-shadow:none;margin:0 -4px;display:block;padding:0 4px">Bouée/bateau ${data.id_station}</b>`
+    } else {
+      html += `<b class="degrade-vertical-gris" style="color:black;text-shadow:none;margin:0 -4px;display:block;padding:0 4px">${data.libelle ?? ''}`
+      if (data.altitude !== undefined) html += ` [${data.altitude}m]`
+      html += `</b>`
+    }
+
+    if (data.temperature !== undefined) {
+      html += `<b style="display:inline-block;width:${w}px">Température:</b> `
+      html += `<span class="square-colored" style="background:${data.temperature_couleur}"></span> `
+      html += `${data.temperature}°C`
+    }
+    if (data.humidite !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Humidité:</b> `
+      html += `<span class="square-colored" style="background:${data.humidite_couleur}"></span> `
+      html += `${data.humidite}%`
+    }
+    if (data.pression !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Pression:</b> `
+      html += `<span class="square-colored" style="background:${data.pression_couleur}"></span> `
+      html += `${data.pression}hPa`
+    }
+    if (data.vent_moyen !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Vent moyen:</b> `
+      html += `<span class="square-colored"></span> ${data.vent_moyen} km/h`
+    }
+    if (data.vent_rafales !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Rafales:</b> `
+      html += `<span class="square-colored"></span> ${data.vent_rafales} km/h`
+    }
+    if (data.pluie_1h !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Pluie sur 1h:</b> `
+      html += `<span class="square-colored"></span> ${data.pluie_1h} mm`
+    }
+    if (data.temperature_eau !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Temp. eau:</b> `
+      html += `<span class="square-colored" style="background:${data.temperature_eau_couleur}"></span> `
+      html += `${data.temperature_eau}°C`
+    }
+    if (data.hauteur_vagues !== undefined) {
+      html += `<br/><b style="display:inline-block;width:${w}px">Hauteur vagues:</b> `
+      html += `<span class="square-colored"></span> ${data.hauteur_vagues}m`
+    }
+    if (data.temps) {
+      html += `<div style="max-width:150px;font-size:9px"><i>${data.temps}</i></div>`
+    }
+    if (data.pictogramme) {
+      html += `<span class="degrade-vertical-gris" style="position:absolute;top:-7px;right:-7px;box-shadow:0 0 3px #333;border-radius:5px;padding:2px"><img src="${data.pictogramme}" alt=""/></span>`
+    }
+    if (data.genre === 'static' || data.genre === 'synop' || data.genre === 'mf') {
+      html += `<img style="display:block;width:200px;height:100px;margin:0 -4px" src="//www.infoclimat.fr/stations-meteo/images/static/${data.id_station}_temperature.gif" alt=""/>`
+      if (data._wcam) {
+        html += `<div style="display:block;width:200px;height:100px;margin:0 -4px;background-size:cover;background-image:url(${data._wcam});background-position:50% 50%"></div>`
+      }
+    }
+
+    return html
+  }
+
+  async function loadStationsMarkers(param: 'temperature' | 'temperature_min' | 'temperature_max') {
+    const map = leafletMap.value
+    const config = store.icMapConfig
+    if (!map || !config || !store.displayMarkers) {
+      return
+    }
+
+    if (stationsAbortController) {
+      stationsAbortController.abort()
+    }
+    stationsAbortController = new AbortController()
+    const { signal } = stationsAbortController
+
+    stationsGroup.clearLayers()
+
+    const bounds = map.getBounds()
+    const sw = bounds.getSouthWest().wrap()
+    const ne = bounds.getNorthEast().wrap()
+    const info = config.ltiles.temperature.info
+
+    try {
+      const stations = await getStationsMarkers(
+        {
+          param: param,
+          north: ne.lat,
+          south: sw.lat,
+          east: ne.lng,
+          west: sw.lng,
+          zoom: map.getZoom(),
+          year: info.year,
+          month: info.month,
+          day: info.day,
+          hour: info.hour,
+        },
+        signal,
+      )
+
+      if (signal.aborted) return
+
+      for (const station of stations) {
+        L.marker([station.lat, station.lon], {
+          riseOnHover: true,
+          icon: L.icon({
+            iconUrl: station.icon,
+            iconSize: station.size,
+            iconAnchor: station.anchor,
+          }),
+        })
+          .addTo(stationsGroup)
+          .on('mouseover', (e: L.LeafletMouseEvent) => {
+            const ev = e.originalEvent as MouseEvent
+            const cacheKey = `${station.id}/${info.hour}`
+
+            if (stationsCache.has(cacheKey)) {
+              showLegend(
+                formatStationTooltip(stationsCache.get(cacheKey)!),
+                ev.pageX + 7,
+                ev.pageY + 7,
+              )
+              return
+            }
+
+            hoverTimeout = setTimeout(async () => {
+              try {
+                const detail = await getStationDetail({
+                  id: station.id,
+                  year: info.year,
+                  month: info.month,
+                  day: info.day,
+                  hour: info.hour,
+                  token: store.icMapToken,
+                })
+                stationsCache.set(cacheKey, detail)
+                showLegend(formatStationTooltip(detail), ev.pageX + 7, ev.pageY + 7)
+              } catch {
+                /* tooltip fetch errors are non-critical */
+              }
+            }, 200)
+          })
+          .on('mouseout', () => {
+            if (hoverTimeout) {
+              clearTimeout(hoverTimeout)
+              hoverTimeout = null
+            }
+            hideLegend()
+          })
+          .on('click', () => {
+            if (station._ty === 'bouees') {
+              window.open(
+                `//www.infoclimat.fr/mer/bouees.php?id=${station._uid}&jour=${info.year}${info.month}${info.day}#highlight=${info.hour}`,
+                '_blank',
+              )
+            } else {
+              window.open(
+                `//www.infoclimat.fr/stations-meteo/?s=${station._uid}&d=${info.year}-${info.month}-${info.day}#highlight=${info.hour}`,
+                '_blank',
+              )
+            }
+          })
+      }
+    } catch (err: unknown) {
+      if (signal.aborted) return
+      console.error('Failed to load station markers:', err)
+    }
+  }
+
+  function clearStationsMarkers() {
+    if (stationsAbortController) {
+      stationsAbortController.abort()
+      stationsAbortController = null
+    }
+    stationsGroup.clearLayers()
+  }
+
   // ── Favourite places ─────────────────────────────────────
 
   function addFavoritePlaces(prefs: LieuPref[]) {
@@ -273,6 +478,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
       const url = buildTileUrl(getUrlTemplate(param), param, tileConf.info, tileConf.key)
       const layer = tileLayer.wms(url, {
         ...DEFAULT_WMS_PARAMS,
+        NOTRANSPARENCY: param === 'temperature' ? 1 : 0,
         layers: getLayersString(param),
         maxZoom: 11,
         minZoom: 1,
@@ -285,8 +491,13 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
 
     if (param === 'meteoalerte') {
       loadObservationMarkers()
+      clearStationsMarkers()
+    } else if (param === 'temperature') {
+      clearObservationMarkers()
+      loadStationsMarkers('temperature')
     } else {
       clearObservationMarkers()
+      clearStationsMarkers()
     }
   }
 
@@ -408,6 +619,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     overlayGroup = new L.LayerGroup()
     favoritesGroup = L.featureGroup()
     markersGroup = new L.LayerGroup()
+    stationsGroup = new L.LayerGroup()
 
     const map = L.map(el, {
       markerZoomAnimation: true,
@@ -452,6 +664,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     addFavoritePlaces(store.lieuxPrefs)
     favoritesGroup.addTo(map)
     markersGroup.addTo(map)
+    stationsGroup.addTo(map)
 
     const savedView = readSavedMapView()
     if (savedView) {
@@ -463,8 +676,13 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     isReady.value = true
 
     map.on('moveend', () => {
-      if (currentBaseParam === 'meteoalerte' && store.displayMarkers) {
+      if (!store.displayMarkers) {
+        return
+      }
+      if (currentBaseParam === 'meteoalerte') {
         loadObservationMarkers()
+      } else if (currentBaseParam === 'temperature') {
+        loadStationsMarkers('temperature')
       }
     })
 
@@ -482,11 +700,16 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
       markersAbortController.abort()
       markersAbortController = null
     }
+    if (stationsAbortController) {
+      stationsAbortController.abort()
+      stationsAbortController = null
+    }
     if (hoverTimeout) {
       clearTimeout(hoverTimeout)
       hoverTimeout = null
     }
     observationCache.clear()
+    stationsCache.clear()
     if (leafletMap.value) {
       leafletMap.value.remove()
       leafletMap.value = null

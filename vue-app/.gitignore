@@ -31,3 +31,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+
+# So I can store legacy files when I vibe code
+legacy-files/
