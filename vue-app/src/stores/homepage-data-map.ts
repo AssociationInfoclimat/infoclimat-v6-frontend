@@ -79,15 +79,20 @@ export const useHomepageDataMapStore = defineStore('homepageDataMap', () => {
 
   // ── Layer state management ───────────────────────────────
 
-  function setBaseLayer(key: BaseLayerParam): void {
+  const setBaseLayer = (key: BaseLayerParam, customOverlays?: OverlayParamWithAutoSat[]): void => {
     //
     // If key is sattelite, we return, depending on night time or not,
     //  a base layer with additional keys: irA, irAhdbtrans
+    //
+    // activeBase is watched in useLeafletMap.ts to apply the base layer to the map
+    //
     activeBase.value = resolveNightTimeBaseLayer(key) // normalizeParam(key))
 
     // We keep cities overlay if it is already present
     const keepCities = activeOverlays.value.includes('cities')
-    activeOverlays.value = keepCities ? ['cities'] : []
+    activeOverlays.value = (customOverlays ?? [])
+      .map((overlay) => resolveOverlayKey(overlay))
+      .concat(keepCities ? ['cities'] : [])
   }
 
   //  function toggleOverlay(key: string) {
@@ -115,7 +120,7 @@ export const useHomepageDataMapStore = defineStore('homepageDataMap', () => {
   //    activeOverlays.value = overlays
   //  }
 
-  function applyConf(conf: DefaultMapConf) {
+  const applyConf = (conf: DefaultMapConf) => {
     activeBase.value = resolveNightTimeBaseLayer(conf.base) // normalizeParam(conf.base))
     activeOverlays.value = conf.overlays.map((overlay) => resolveOverlayKey(overlay))
   }

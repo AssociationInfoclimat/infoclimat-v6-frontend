@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/user'
 import CentralBarMenuItem from './CentralBarMenuItem.vue'
 import { useHomepageDataMapStore } from '@/stores/homepage-data-map'
 import { storeToRefs } from 'pinia'
+import { getDataMapDefaultConf } from '@/client/data-map.api'
 
 const { setMapDataMenuSelected, setBaseLayer } = useHomepageDataMapStore()
 const { mapDataMenuSelected: selectedMenu } = storeToRefs(useHomepageDataMapStore())
@@ -34,22 +35,42 @@ const emit = defineEmits<{
   (e: 'updateParamFromMap', param: Param): void
 }>()
 
-const updateMapData = (param: Param): void => {
+const updateMapData = async (param: Param): Promise<void> => {
   // TODO
   console.log('updateMapData', param)
   switch (param) {
-    case 'meteoalerte':
+    case 'meteoalerte': {
+      // Observations menu (= DEFAULT menu)
       setMapDataMenuSelected('observations')
-      setBaseLayer('meteoalerte')
+      // We actually want to apply a base (meteoalerte) + BUT also apply the DEFAULT overlays (sat_auto, radaric)
+      const defaultConf = await getDataMapDefaultConf()
+      setBaseLayer('meteoalerte', defaultConf.overlays)
       break
-    case 'radaric':
+    }
+    case 'radaric': {
+      // Precipitations menu
       setMapDataMenuSelected('precipitations')
       setBaseLayer('radaric')
       break
-    case 'temperature':
+    }
+    case 'foudre': {
+      // Foudre menu
+      setMapDataMenuSelected('foudre')
+      setBaseLayer('foudre')
+      break
+    }
+    case 'vishdbtrans': {
+      // Satellite menu
+      setMapDataMenuSelected('satellite')
+      setBaseLayer('vishdbtrans')
+      break
+    }
+    case 'temperature': {
+      // Temperature menu
       setMapDataMenuSelected('temperature')
       setBaseLayer('temperature')
       break
+    }
     default:
   }
 }

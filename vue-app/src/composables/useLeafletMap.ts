@@ -452,7 +452,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
 
   // ── Base layer ───────────────────────────────────────────
 
-  function applyBaseLayer(param: BaseLayerParamWithNightLayerParam) {
+  const applyBaseLayer = (param: BaseLayerParamWithNightLayerParam) => {
     const map = leafletMap.value
     const config = store.icMapConfig
     if (!map || !config) {
@@ -478,6 +478,15 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
       maxZoom: 11, // match the max zoom of the map
       minZoom: 1, // match the min zoom of the map
       useCache: true, // cache the tiles to avoid flickering
+    })
+
+    const coastlinesLayer = leafletTileLayer(getUrlTemplate(`coastlines`), {
+      ...DEFAULT_WMS_PARAMS,
+      // layers: getLayersString(`coastlines`),
+      maxZoom: 11,
+      minZoom: 1,
+      useCache: true,
+      opacity: 0.6,
     })
 
     // -----------------------------------------------------
@@ -527,7 +536,74 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
       layerGroup.addLayer(bgSatLayer)
       layerGroup.addLayer(layerRadaric)
       layerGroup.addLayer(layerNexrad)
-      console.log('layerGroup', layerGroup.getLayers())
+    } else if (param === 'foudre') {
+      //
+      // Show "Foudre" menu
+      //
+      const tileFoudreConf = config.ltiles[param as ApiTileLayerKey]
+      if (!tileFoudreConf) {
+        console.error(`Unknown tile layer param: ${param}`)
+        return
+      }
+      const urlFoudre = buildTileUrl(
+        getUrlTemplate(param),
+        param,
+        tileFoudreConf.info,
+        tileFoudreConf.key,
+      )
+      const layerFoudre = tileLayer.wms(urlFoudre, {
+        ...DEFAULT_WMS_PARAMS,
+        layers: getLayersString(param),
+        maxZoom: 11,
+        minZoom: 1,
+      })
+      layerGroup.addLayer(bgSatLayer)
+      layerGroup.addLayer(layerFoudre)
+    } else if (
+      param === 'vishdbtrans' ||
+      param === 'vis' ||
+      param === 'irAhdbtrans' ||
+      param === 'irA'
+    ) {
+      //
+      // Show "Satellite" menu
+      //
+      /**
+       * ir is INRA-ROUGE (for night time)
+       **/
+      const autoParam: 'irAhdbtrans' | 'vishdbtrans' = store.icMapConfig?.isNightTime
+        ? 'irAhdbtrans'
+        : 'vishdbtrans'
+      const tileAutoConf = config.ltiles[autoParam as ApiTileLayerKey]
+      if (!tileAutoConf) {
+        console.error(`Unknown tile layer param: ${autoParam}`)
+        return
+      }
+      const urlAuto = buildTileUrl(
+        getUrlTemplate(autoParam),
+        autoParam,
+        tileAutoConf.info,
+        tileAutoConf.key,
+      )
+
+      const parameterLayer =
+        autoParam === 'irAhdbtrans'
+          ? tileLayer.wms(urlAuto, {
+              ...DEFAULT_WMS_PARAMS,
+              layers: getLayersString(autoParam),
+              maxZoom: 11,
+              minZoom: 1,
+              opacity: 1,
+            })
+          : leafletTileLayer(urlAuto, {
+              maxZoom: 11,
+              minZoom: 1,
+              opacity: 0.75,
+            })
+
+      layerGroup.addLayer(bgSatLayer)
+      layerGroup.addLayer(parameterLayer)
+      layerGroup.addLayer(coastlinesLayer)
     } else {
       const tileConf = config.ltiles[param as ApiTileLayerKey]
       if (!tileConf) {
@@ -566,10 +642,10 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
 
   // ── Overlay creation ─────────────────────────────────────
 
-  function createOverlayLayer(
+  const createOverlayLayer = (
     param: OverlayParam,
     config: IcMapConfigApiResponse,
-  ): L.TileLayer | null {
+  ): L.TileLayer | null => {
     // if (param === 'estofex') return null
 
     let tileParam = param
@@ -661,17 +737,17 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
 
   // ── Combined apply ───────────────────────────────────────
 
-  function applyLayers(base: BaseLayerParamWithNightLayerParam, overlays: OverlayParam[]) {
+  const applyLayers = (base: BaseLayerParamWithNightLayerParam, overlays: OverlayParam[]): void => {
     applyBaseLayer(base)
     syncOverlays(overlays)
   }
 
   // ── Init / Destroy ───────────────────────────────────────
 
-  function initMap(initialConf?: {
+  const initMap = (initialConf?: {
     base: BaseLayerParamWithNightLayerParam
     overlays: OverlayParam[]
-  }): boolean {
+  }): boolean => {
     const el = mapElementRef.value
     const config = store.icMapConfig
     if (!el || !config) {
@@ -788,6 +864,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
   // ── Watchers ─────────────────────────────────────────────
 
   watch(
+    // They change in `CentralBarMenu.vue`, through the `updateMapData` method
     () => [store.activeBase, store.activeOverlays] as const,
     ([base, overlays]) => {
       if (!isReady.value || !base) {
@@ -808,7 +885,7 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     legendX,
     legendY,
     legendHtml,
-    initMap,
-    destroy,
+    initMap: initMap,
+    destroy: destroy,
   }
 }

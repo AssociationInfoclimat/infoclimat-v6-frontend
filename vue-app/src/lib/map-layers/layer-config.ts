@@ -230,9 +230,20 @@ export const NEEDS_COASTLINES_SET = new Set(['vis', 'irA', 'radaric', 'vishdbtra
 
 // ── Public helpers ────────────────────────────────────────────
 
-export function getLayersString(param: LayerType | 'coastlines' | 'sat'): string {
+export function getLayersString(
+  // TODO: Maybe the type is not complete, we should add all the possible parameters
+  param: LayerType | 'foudre-live' | 'webcams' | 'coastlines' | 'sat',
+): string {
   const name =
-    param === 'coastlines' ? 'coastlines' : param === 'sat' ? 'sat' : toGeoCacheName(param)
+    param === 'coastlines'
+      ? 'coastlines'
+      : param === 'sat'
+        ? 'sat'
+        : param === 'foudre-live'
+          ? 'foudre-live'
+          : param === 'webcams'
+            ? 'webcams'
+            : toGeoCacheName(param)
   return GEOCACHE_TO_LAYERS.get(name) ?? DEFAULT_LAYERS
 }
 
