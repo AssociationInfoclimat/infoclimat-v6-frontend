@@ -1,6 +1,6 @@
 import { type Ref, shallowRef, ref, watch, onBeforeUnmount } from 'vue'
 import L, { tileLayer as leafletTileLayer, type WMSOptions } from 'leaflet'
-import wms from 'leaflet.wms'
+import wms, { layer } from 'leaflet.wms'
 import { GestureHandling } from 'leaflet-gesture-handling'
 import { useHomepageDataMapStore } from '@/stores/homepage-data-map'
 import type { IcMapConfigApiResponse, LieuPref, StationDetail } from '@/client/data-map.api.types'
@@ -18,6 +18,7 @@ import {
   buildTileUrl,
   NEEDS_COASTLINES_SET,
   NEXRAD_BOUNDS,
+  RADARIC_BOUNDS,
 } from '@/lib/map-layers/layer-config'
 import type {
   BaseLayerParamWithNightLayerParam,
@@ -27,6 +28,7 @@ import type {
 // We need to override the type to add the NOTRANSPARENCY property
 type ICWMSOptions = Omit<WMSOptions, 'NOTRANSPARENCY'> & {
   NOTRANSPARENCY?: 1 | 0
+  useCache?: boolean
 }
 // We need to override tileLayer.wms to add the NOTRANSPARENCY property
 const tileLayer = {
@@ -467,8 +469,65 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     ;(map as any).gestureHandling?.enable()
     map.setMaxZoom(11)
 
+    // ── Shared reusable base layer for satellite images ──
+
+    /** This layer is NOT a WMS (and so we've not any `?query=xxx` in URL of the template) */
+    const bgSatLayer = leafletTileLayer(getUrlTemplate('sat'), {
+      ...DEFAULT_WMS_PARAMS,
+      // layers: getLayersString('sat'),
+      maxZoom: 11, // match the max zoom of the map
+      minZoom: 1, // match the min zoom of the map
+      useCache: true, // cache the tiles to avoid flickering
+    })
+
+    // -----------------------------------------------------
+
     if (param === 'meteoalerte') {
+      //
+      // Show "Observations" menu
+      //
       layerGroup.addLayer(backgroundLayer)
+    } else if (param === 'radaric') {
+      //
+      // Show "Précipitations" menu
+      //
+      const tileConf = config.ltiles[param as ApiTileLayerKey]
+      const tileNexradConf = config.ltiles['nexrad']
+      if (!tileConf || !tileNexradConf) {
+        console.error(`Unknown tile layer param: ${param}`)
+        return
+      }
+      const urlRadaric = buildTileUrl(getUrlTemplate(param), param, tileConf.info, tileConf.key)
+      const urlNexrad = buildTileUrl(
+        getUrlTemplate('nexrad'),
+        'nexrad',
+        tileNexradConf.info,
+        tileNexradConf.key,
+      )
+      const layerRadaric = tileLayer.wms(urlRadaric, {
+        ...DEFAULT_WMS_PARAMS,
+        layers: getLayersString(param),
+        maxZoom: 11,
+        minZoom: 1,
+        bounds: L.latLngBounds(
+          { lng: RADARIC_BOUNDS[0], lat: RADARIC_BOUNDS[2] },
+          { lng: RADARIC_BOUNDS[1], lat: RADARIC_BOUNDS[3] },
+        ),
+      })
+      const layerNexrad = tileLayer.wms(urlNexrad, {
+        ...DEFAULT_WMS_PARAMS,
+        layers: getLayersString('nexrad'),
+        maxZoom: 11,
+        minZoom: 1,
+        bounds: L.latLngBounds(
+          { lng: NEXRAD_BOUNDS[0], lat: NEXRAD_BOUNDS[2] },
+          { lng: NEXRAD_BOUNDS[1], lat: NEXRAD_BOUNDS[3] },
+        ),
+      })
+      layerGroup.addLayer(bgSatLayer)
+      layerGroup.addLayer(layerRadaric)
+      layerGroup.addLayer(layerNexrad)
+      console.log('layerGroup', layerGroup.getLayers())
     } else {
       const tileConf = config.ltiles[param as ApiTileLayerKey]
       if (!tileConf) {
@@ -489,9 +548,13 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     layerGroup.addTo(map)
     map.whenReady(() => (map as any).gestureHandling?._handleMouseOver?.())
 
+    //
+    // Load the markers, according to the selected `param`
+    //
+
     if (param === 'meteoalerte') {
-      loadObservationMarkers()
       clearStationsMarkers()
+      loadObservationMarkers()
     } else if (param === 'temperature') {
       clearObservationMarkers()
       loadStationsMarkers('temperature')
@@ -518,7 +581,9 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
     //    }
 
     const tileConf = config.ltiles[tileParam as ApiTileLayerKey]
-    if (!tileConf && param !== 'cities') return null
+    if (!tileConf && param !== 'cities') {
+      return null
+    }
 
     const template = getUrlTemplate(param)
     let url = buildTileUrl(template, param, tileConf?.info, tileConf?.key)
@@ -725,7 +790,10 @@ export function useLeafletMap(mapElementRef: Ref<HTMLElement | null>) {
   watch(
     () => [store.activeBase, store.activeOverlays] as const,
     ([base, overlays]) => {
-      if (!isReady.value || !base) return
+      if (!isReady.value || !base) {
+        return
+      }
+      console.log('activeBase or activeOverlays changed', base, overlays)
       applyLayers(base, overlays)
     },
     { deep: true },

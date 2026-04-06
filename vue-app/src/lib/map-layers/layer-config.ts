@@ -1,6 +1,10 @@
 import type { MapTileInfo } from '@/client/data-map.api.types'
-import type { GeoJsonFeatureStyle } from './types'
+import type { GeoJsonFeatureStyle, LayerType, SatelliteLayerType } from './types'
 import type { WMSParams } from 'leaflet'
+import type {
+  BaseLayerParamWithNightLayerParam,
+  OverlayParam,
+} from '@/stores/homepage-data-map.types'
 
 const TILE_KEY = import.meta.env.VITE_TILE_KEY ?? ''
 
@@ -64,9 +68,9 @@ export const GEOJSON_PROP_TO_STYLE: Record<string, GeoJsonFeatureStyle> = {
 
 // ── Param sets by URL template type ───────────────────────────
 
-const SATELLITE_PARAMS = new Set(['vis', 'irA', 'frT'])
+const SATELLITE_PARAMS = new Set<SatelliteLayerType>(['vis', 'irA', 'frT'])
 
-const LAYER_PARAMS = new Set([
+const LAYER_PARAMS = new Set<LayerType>([
   'temperature',
   'pression',
   'ac24hradaricval',
@@ -93,12 +97,13 @@ const LAYER_PARAMS = new Set([
 // ── Param → GeoWebCache name ─────────────────────────────────
 
 // prettier-ignore
-const PARAM_TO_GEOCACHE: ReadonlyMap<string, string> = new Map([
+const PARAM_TO_GEOCACHE: ReadonlyMap<LayerType, string> = new Map([
   ['temperature',      'temperatureHDnoSST'],
   ['pression',         'temperatureHD'],
-  ['vis',              'sat'],
-  ['irA',              'sat'],
-  ['frT',              'sat'],
+  // These ones are handled by the satellite template
+  // ['vis',              'sat'],
+  // ['irA',              'sat'],
+  // ['frT',              'sat'],
   ['vishdbtrans',      'cloudsauto'],
   ['vishdb',           'cloudsauto'],
   ['irAhdb',           'cloudsauto'],
@@ -118,7 +123,7 @@ const PARAM_TO_GEOCACHE: ReadonlyMap<string, string> = new Map([
   ['mCanalysis',       'iso'],
 ])
 
-function toGeoCacheName(param: string): string {
+function toGeoCacheName(param: LayerType): string {
   return PARAM_TO_GEOCACHE.get(param) ?? param
 }
 
@@ -210,20 +215,32 @@ const GEOCACHE_TO_MAP_FILE: ReadonlyMap<string, string> = new Map([
 export const NEXRAD_BOUNDS: [lngWest: number, lngEast: number, latSouth: number, latNorth: number] =
   [-127, -60, 20, 55]
 
+// ── Radaric bounds ─────────────────────────────────────────────
+
+export const RADARIC_BOUNDS: [
+  lngWest: number,
+  lngEast: number,
+  latSouth: number,
+  latNorth: number,
+] = [-15, 15, 40, 55]
+
 // ── Overlays that require coastlines ──────────────────────────
 
 export const NEEDS_COASTLINES_SET = new Set(['vis', 'irA', 'radaric', 'vishdbtrans', 'irAhdbtrans'])
 
 // ── Public helpers ────────────────────────────────────────────
 
-export function getLayersString(param: string): string {
-  const name = toGeoCacheName(param)
+export function getLayersString(param: LayerType | 'coastlines' | 'sat'): string {
+  const name =
+    param === 'coastlines' ? 'coastlines' : param === 'sat' ? 'sat' : toGeoCacheName(param)
   return GEOCACHE_TO_LAYERS.get(name) ?? DEFAULT_LAYERS
 }
 
-function getMapFileName(param: string): string {
-  if (SATELLITE_PARAMS.has(param)) return 'satMO'
-  const name = toGeoCacheName(param)
+function getMapFileName(param: SatelliteLayerType | LayerType): string {
+  if (SATELLITE_PARAMS.has(param as SatelliteLayerType)) {
+    return 'satMO'
+  }
+  const name = toGeoCacheName(param as LayerType)
   const file = GEOCACHE_TO_MAP_FILE.get(name)
   if (!file) {
     console.error(`Unknown map file for param "${param}", falling back to temperature`)
@@ -232,7 +249,16 @@ function getMapFileName(param: string): string {
   return file
 }
 
-export function getUrlTemplate(param: string): string {
+export function getUrlTemplate(
+  param:
+    | BaseLayerParamWithNightLayerParam
+    | OverlayParam
+    | 'nexrad'
+    | 'meteoalerteli'
+    | 'coastlines'
+    | 'sat'
+    | 'hillshade',
+): string {
   if (param === 'hillshade') {
     return URL_TEMPLATE_MAPBOX.replace('{mkey}', 'hillshade')
   }
@@ -249,14 +275,14 @@ export function getUrlTemplate(param: string): string {
     return '//{s}.tempsreel.infoclimat.net/secureHD/m:coastlines/{z}/{x}/{y}.png'
   }
 
-  if (SATELLITE_PARAMS.has(param)) {
-    return URL_TEMPLATE_SATELLITE.replace('{mkey}', getMapFileName(param))
+  if (SATELLITE_PARAMS.has(param as SatelliteLayerType)) {
+    return URL_TEMPLATE_SATELLITE.replace('{mkey}', getMapFileName(param as SatelliteLayerType))
   }
 
-  if (LAYER_PARAMS.has(param)) {
-    return URL_TEMPLATE_LAYERS.replace('{mkey}', getMapFileName(param)).replace(
+  if (LAYER_PARAMS.has(param as LayerType)) {
+    return URL_TEMPLATE_LAYERS.replace('{mkey}', getMapFileName(param as LayerType)).replace(
       '{pl}',
-      getLayersString(param),
+      getLayersString(param as LayerType),
     )
   }
 
@@ -267,12 +293,12 @@ export function getUrlTemplate(param: string): string {
 }
 
 export function buildTileUrl(
-  template: string,
+  urlTemplate: string,
   param: string,
   info?: MapTileInfo & { last_stroke?: number },
   key?: string | false,
 ): string {
-  return template
+  return urlTemplate
     .replace('{pkey}', param)
     .replace('{py}', info?.year ?? '')
     .replace('{pm}', info?.month ?? '')
